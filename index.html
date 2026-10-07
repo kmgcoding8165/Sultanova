@@ -1,0 +1,940 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AI Galaxy — ИИ простыми словами</title>
+<meta name="description" content="Какие бывают нейросети, какую выбрать и как с ними работать. Простыми словами, с живой лентой новостей. / AI explained in plain words.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#050816; --bg2:#0a1030; --card:rgba(14,24,64,.62); --ink:#e8f0ff; --muted:#9db0dd; --line:rgba(110,160,255,.22);
+  --b1:#2f7bff; --b2:#00d4ff; --b3:#7c5cff; --ok:#27e6a3; --warn:#ffb84d;
+  --glow:0 0 28px rgba(47,123,255,.45);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;font:17px/1.65 Inter,system-ui,"Segoe UI",Arial,sans-serif;color:var(--ink);
+  background:radial-gradient(1200px 700px at 80% -10%,#10307a 0%,transparent 60%),radial-gradient(900px 600px at -10% 40%,#16105a 0%,transparent 60%),var(--bg);
+  background-attachment:fixed;overflow-x:hidden}
+#stars{position:fixed;inset:0;z-index:-1;width:100%;height:100%}
+a{color:inherit}
+.wrap{max-width:1160px;margin:0 auto;padding:0 20px;position:relative}
+section{padding:80px 0;position:relative}
+h1,h2,h3{line-height:1.18;margin:0 0 .5em}
+h1,h2,.logo,.cap{font-family:Orbitron,Inter,sans-serif}
+h2{font-size:clamp(24px,3.6vw,36px);letter-spacing:.01em}
+h2::after{content:"";display:block;width:70px;height:3px;margin-top:12px;border-radius:3px;background:linear-gradient(90deg,var(--b2),var(--b3));box-shadow:0 0 14px var(--b2)}
+.lead{color:var(--muted);max-width:740px;margin:0 0 34px}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:12px 22px;border-radius:14px;border:0;font:600 1em Inter,sans-serif;cursor:pointer;text-decoration:none;color:#fff;
+  background:linear-gradient(135deg,var(--b1),var(--b2));box-shadow:0 0 0 1px rgba(255,255,255,.12) inset,0 6px 22px rgba(0,140,255,.35);transition:transform .15s,box-shadow .15s}
+.btn:hover{transform:translateY(-2px);box-shadow:0 0 0 1px rgba(255,255,255,.2) inset,0 10px 32px rgba(0,190,255,.55)}
+.btn.ghost{background:rgba(20,40,100,.35);box-shadow:0 0 0 1px var(--line) inset}
+.btn.sm{padding:9px 15px;font-size:.92em}
+.glass{background:var(--card);border:1px solid var(--line);border-radius:22px;backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);box-shadow:0 10px 40px rgba(0,0,40,.45)}
+
+/* header */
+header{position:sticky;top:0;z-index:50;background:rgba(5,8,22,.72);backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+.nav{display:flex;align-items:center;gap:18px;height:64px}
+.logo{font-weight:800;font-size:1.1em;text-decoration:none;margin-right:auto;letter-spacing:.04em}
+.logo span{background:linear-gradient(90deg,var(--b2),var(--b3));-webkit-background-clip:text;background-clip:text;color:transparent}
+.nav a.l{text-decoration:none;color:var(--muted);font-size:.93em}
+.nav a.l:hover{color:#fff;text-shadow:0 0 12px var(--b2)}
+.lang{display:flex;border:1px solid var(--line);border-radius:12px;overflow:hidden}
+.lang button{background:transparent;border:0;color:var(--muted);padding:8px 12px;cursor:pointer;font:700 .85em Inter}
+.lang button.on{background:linear-gradient(135deg,var(--b1),var(--b2));color:#fff}
+.bell{position:relative;background:rgba(20,40,100,.4);border:1px solid var(--line);border-radius:12px;width:42px;height:42px;cursor:pointer;font-size:18px;color:#fff}
+.bell b{position:absolute;top:-6px;right:-6px;background:#ff3d71;color:#fff;border-radius:99px;font:700 11px/19px Inter;min-width:19px;height:19px;text-align:center}
+@media(max-width:900px){.nav a.l{display:none}}
+
+/* ticker */
+.ticker{background:linear-gradient(90deg,#0b2a7a,#1456d6 50%,#0b2a7a);overflow:hidden;white-space:nowrap;font-size:.9em;border-bottom:1px solid var(--line)}
+.ticker div{display:inline-block;padding:8px 0;animation:run 90s linear infinite}
+.ticker:hover div{animation-play-state:paused}
+.ticker a{margin:0 30px;text-decoration:none}
+.ticker a:hover{text-decoration:underline}
+@keyframes run{to{transform:translateX(-50%)}}
+
+/* hero */
+.hero{padding:60px 0 30px}
+.hero .grid{display:grid;grid-template-columns:1.05fr .95fr;gap:30px;align-items:center}
+.eyebrow{display:inline-block;padding:6px 14px;border:1px solid var(--line);border-radius:99px;color:var(--b2);font-size:.82em;letter-spacing:.14em;text-transform:uppercase;background:rgba(0,150,255,.08);margin-bottom:18px}
+.hero h1{font-size:clamp(32px,5.4vw,56px);letter-spacing:.01em}
+.hero h1 em{font-style:normal;background:linear-gradient(90deg,var(--b2),#7ab6ff,var(--b3));-webkit-background-clip:text;background-clip:text;color:transparent;filter:drop-shadow(0 0 18px rgba(0,200,255,.35))}
+.hero p{color:var(--muted);font-size:1.1em;max-width:560px}
+.cta{display:flex;gap:12px;flex-wrap:wrap;margin-top:26px}
+.stats{display:flex;gap:26px;margin-top:34px;flex-wrap:wrap}
+.stats div{font-size:.85em;color:var(--muted)}
+.stats b{display:block;font:800 1.6em Orbitron;color:#fff;text-shadow:0 0 16px var(--b1)}
+.space{position:relative;aspect-ratio:1;max-width:520px;width:100%;margin:auto}
+@keyframes spin{to{transform:rotate(360deg)}}
+.space .aura{position:absolute;inset:-12%;border-radius:50%;background:radial-gradient(closest-side,rgba(0,170,255,.34),rgba(60,80,255,.16) 55%,transparent 72%);filter:blur(10px);animation:breathe 7s ease-in-out infinite}
+@keyframes breathe{50%{transform:scale(1.06);opacity:.8}}
+.space .pl{position:absolute;left:25%;top:25%;width:50%;height:50%;border-radius:50%;z-index:2;filter:drop-shadow(0 0 34px rgba(40,140,255,.65))}
+.space .ringw{position:absolute;left:3%;top:3%;width:94%;height:94%;z-index:1;pointer-events:none;transform:rotate(-16deg) scaleY(.26)}
+.space .ringw.front{z-index:3;clip-path:inset(50% 0 0 0)}
+.space .ringw i{position:absolute;inset:0;border-radius:50%;background:radial-gradient(closest-side,transparent 56%,rgba(150,215,255,.0) 57%,rgba(120,200,255,.55) 60%,rgba(90,130,255,.22) 64%,rgba(190,225,255,.5) 68%,rgba(130,110,255,.25) 74%,rgba(150,210,255,.45) 78%,transparent 80%);filter:blur(.6px)}
+.space .glint{position:absolute;z-index:4;left:40%;top:30%;width:14%;aspect-ratio:1;background:radial-gradient(closest-side,rgba(255,255,255,.55),transparent);filter:blur(8px);mix-blend-mode:screen;pointer-events:none}
+.orbit-ring{position:absolute;inset:4%;border:1px solid rgba(110,170,255,.22);border-radius:50%;animation:spin 70s linear infinite}
+.orbit-ring::after{content:"";position:absolute;top:-4px;left:50%;width:8px;height:8px;border-radius:50%;background:#7ae0ff;box-shadow:0 0 14px 3px #3cc8ff}
+.orbit-ring2{inset:-6%;animation-duration:110s;animation-direction:reverse;border-color:rgba(150,110,255,.22)}
+.orbit-ring2::after{background:#b79cff;box-shadow:0 0 14px 3px #8a63ff}
+.sat{position:absolute;width:19%;aspect-ratio:1;border-radius:24%;display:grid;place-items:center;background:rgba(10,24,70,.75);border:1px solid var(--line);box-shadow:var(--glow);transition:transform .2s,box-shadow .2s;animation:bob 6s ease-in-out infinite}
+.sat:hover{transform:scale(1.18);box-shadow:0 0 36px rgba(0,212,255,.8)}
+.sat img{width:56%;height:56%;border-radius:8px}
+@keyframes bob{50%{translate:0 -10px}}
+.rocket{position:absolute;z-index:5;width:34px;height:34px;offset-path:path("M60 440 C 20 120, 460 60, 480 330");offset-rotate:auto 90deg;animation:fly 11s linear infinite;filter:drop-shadow(0 0 10px #4cf)}
+.rocket svg{width:100%;height:100%}
+@keyframes fly{from{offset-distance:0%}to{offset-distance:100%}}
+@media(max-width:900px){.hero .grid{grid-template-columns:1fr}.rocket{display:none}}
+
+/* planets decor */
+.deco-planet{position:absolute;pointer-events:none;z-index:0;opacity:.95;border-radius:50%;width:300px;height:300px}
+.deco-planet.r{right:-110px;top:20px;filter:drop-shadow(0 0 40px rgba(110,90,255,.55))}
+.deco-planet.l{left:-130px;top:40px;filter:drop-shadow(0 0 40px rgba(40,170,255,.5))}
+body::before{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;opacity:.3;background:var(--neb) center/cover;mix-blend-mode:screen;animation:drift 80s ease-in-out infinite alternate}
+@keyframes drift{from{transform:scale(1) translate(0,0)}to{transform:scale(1.12) translate(-2%,1.5%)}}
+.ic svg{width:30px;height:30px;stroke:url(#ig);fill:none;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+@media(max-width:1300px){.deco-planet{opacity:.35}}
+
+/* news */
+.news-head{display:flex;justify-content:space-between;align-items:end;gap:14px;flex-wrap:wrap;margin-bottom:6px}
+.live{display:inline-flex;align-items:center;gap:8px;font-size:.85em;color:var(--ok)}
+.live i{width:9px;height:9px;border-radius:50%;background:var(--ok);box-shadow:0 0 0 0 rgba(39,230,163,.8);animation:pulse 1.8s infinite}
+.live.off{color:var(--warn)}.live.off i{background:var(--warn);animation:none}
+@keyframes pulse{70%{box-shadow:0 0 0 10px rgba(39,230,163,0)}100%{box-shadow:0 0 0 0 rgba(39,230,163,0)}}
+.news{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:18px}
+.nitem{display:flex;flex-direction:column;overflow:hidden;text-decoration:none;transition:transform .2s,box-shadow .2s}
+.nitem:hover{transform:translateY(-5px);box-shadow:0 0 30px rgba(47,123,255,.5)}
+.nitem .th{height:130px;background:linear-gradient(135deg,#123a9c,#4b2fc9) center/cover;display:grid;place-items:center;font-size:40px}
+.nitem .tx{padding:14px 16px 16px;display:flex;flex-direction:column;gap:6px;flex:1}
+.nitem b{font-weight:600;font-size:.97em;line-height:1.35}
+.nitem small{color:var(--muted);margin-top:auto;font-size:.8em}
+
+/* types */
+.types{display:grid;grid-template-columns:repeat(auto-fit,minmax(255px,1fr));gap:18px;position:relative;z-index:1}
+.type{padding:24px;transition:transform .2s,box-shadow .2s}
+.type:hover{transform:translateY(-4px);box-shadow:0 0 30px rgba(47,123,255,.4)}
+.type .ic{font-size:30px;width:60px;height:60px;display:grid;place-items:center;border-radius:18px;background:radial-gradient(circle at 30% 30%,rgba(0,212,255,.35),rgba(47,123,255,.12));border:1px solid var(--line);margin-bottom:12px;box-shadow:var(--glow)}
+.type h3{font-size:1.1em}
+.type p{margin:.3em 0;color:var(--muted);font-size:.95em}
+.type .ex{font-size:.86em;margin-top:10px;color:var(--b2)}
+
+/* picker */
+.picker{padding:28px;position:relative;z-index:1}
+.chips{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:6px}
+.chip{border:1px solid var(--line);background:rgba(20,40,100,.3);color:var(--ink);padding:9px 16px;border-radius:99px;cursor:pointer;font:500 .93em Inter}
+.chip:hover{border-color:var(--b2);box-shadow:0 0 14px rgba(0,212,255,.3)}
+.chip.on{background:linear-gradient(135deg,var(--b1),var(--b2));border-color:transparent;color:#fff;box-shadow:var(--glow)}
+.q{font-weight:700;margin:18px 0 10px}
+#result{margin-top:22px;display:grid;gap:14px}
+.rec{display:flex;gap:16px;align-items:center;border:1px solid var(--line);border-radius:18px;padding:14px 16px;background:rgba(5,12,40,.5)}
+.rec.first{border-color:var(--ok);box-shadow:0 0 22px rgba(39,230,163,.25)}
+.rec img{width:52px;height:52px;border-radius:14px;background:#fff;padding:7px}
+.rec .t{flex:1}
+.rec small{display:block;color:var(--muted);line-height:1.4}
+.badge{display:inline-block;background:var(--ok);color:#022;font-weight:700;font-size:.7em;padding:2px 9px;border-radius:99px;margin-left:8px;vertical-align:middle}
+@media(max-width:560px){.rec{flex-wrap:wrap}.rec .btn{width:100%}}
+
+/* catalog */
+.filters{margin-bottom:24px}
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(310px,1fr));gap:22px;position:relative;z-index:1}
+.card{overflow:hidden;display:flex;flex-direction:column;transition:transform .2s,box-shadow .2s}
+.card:hover{transform:translateY(-5px);box-shadow:0 0 36px rgba(47,123,255,.5)}
+.card .pic{display:grid;place-items:center;height:150px;position:relative;text-decoration:none;overflow:hidden}
+.card .pic::before{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(255,255,255,.08),transparent 40%,rgba(3,6,28,.55))}
+.card .pic::after{content:"";position:absolute;width:150px;height:150px;border-radius:50%;background:radial-gradient(closest-side,rgba(255,255,255,.28),transparent);filter:blur(6px)}
+.card .pic img{position:relative;z-index:1;width:78px;height:78px;border-radius:20px;background:#fff;padding:11px;box-shadow:0 0 34px rgba(0,200,255,.55);transition:transform .2s}
+.card .pic:hover img{transform:scale(1.12) rotate(-3deg)}
+.card .pic i{position:absolute;z-index:1;right:12px;bottom:10px;font-style:normal;font-size:.75em;background:rgba(0,10,40,.6);padding:3px 11px;border-radius:99px;border:1px solid var(--line)}
+.card .body{padding:20px;display:flex;flex-direction:column;gap:10px;flex:1}
+.card h3{margin:0;font-size:1.2em}
+.card .tag{font-size:.75em;color:var(--b2);font-weight:700;text-transform:uppercase;letter-spacing:.08em}
+.card p{margin:0;color:var(--muted);font-size:.94em}
+.card ul{margin:0;padding-left:18px;font-size:.92em}
+.card .meta{font-size:.85em;display:grid;gap:3px;border-top:1px dashed var(--line);padding-top:10px}
+.card .meta span{color:var(--muted)}
+.card .go{margin-top:auto}
+.card .go .btn{width:100%}
+
+/* learn */
+.steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px;counter-reset:s}
+.step{padding:22px 20px;counter-increment:s}
+.step::before{content:counter(s);display:grid;place-items:center;width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--b1),var(--b3));font:800 .95em Orbitron;margin-bottom:10px;box-shadow:var(--glow)}
+.step h3{font-size:1.02em}
+.step p{margin:0;color:var(--muted);font-size:.94em}
+.formula{border-radius:24px;padding:28px;margin:30px 0;display:grid;gap:14px;background:linear-gradient(135deg,rgba(47,123,255,.4),rgba(124,92,255,.35));border:1px solid var(--line);box-shadow:var(--glow)}
+.formula h3{margin:0}
+.formula .parts{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px}
+.formula .parts div{background:rgba(5,10,40,.5);border-radius:14px;padding:12px 14px;font-size:.92em}
+.formula .parts b{display:block;color:var(--b2)}
+.compare{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.box{border-radius:18px;padding:20px;border:1px solid var(--line);background:var(--card)}
+.box.bad{border-color:#ff4d6d}.box.good{border-color:var(--ok)}
+.box h4{margin:0 0 8px}
+.box code{display:block;white-space:pre-wrap;font:inherit;font-size:.94em;background:rgba(0,0,0,.3);padding:12px;border-radius:12px}
+.box p{color:var(--muted);margin:8px 0 0}
+@media(max-width:700px){.compare{grid-template-columns:1fr}}
+.prompts{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px;margin-top:10px}
+.prompt{padding:18px;display:flex;flex-direction:column;gap:10px}
+.prompt h4{margin:0}
+.prompt p{margin:0;font-size:.9em;background:rgba(0,0,0,.3);padding:12px;border-radius:12px;color:var(--muted);flex:1}
+.safe{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:16px}
+.safe div{background:var(--card);border:1px solid var(--line);border-left:4px solid var(--warn);border-radius:14px;padding:16px 18px}
+.safe b{display:block;margin-bottom:4px}
+.safe span{color:var(--muted);font-size:.93em}
+h3.sub{margin-top:40px;font-size:1.3em}
+
+details{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px 20px;margin-bottom:12px;backdrop-filter:blur(8px)}
+summary{cursor:pointer;font-weight:600}
+details[open]{border-color:var(--b2)}
+details p{margin:10px 0 0;color:var(--muted)}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:0 24px}
+@media(max-width:800px){.two{grid-template-columns:1fr}}
+
+footer{padding:40px 0;color:var(--muted);font-size:.88em;border-top:1px solid var(--line);background:rgba(3,6,20,.6)}
+
+/* toasts + panel */
+#toasts{position:fixed;right:18px;bottom:18px;z-index:100;display:grid;gap:10px;width:min(370px,calc(100vw - 36px))}
+.toast{background:rgba(10,22,70,.92);backdrop-filter:blur(10px);border:1px solid var(--line);border-left:4px solid var(--b2);border-radius:14px;box-shadow:0 12px 40px rgba(0,0,0,.6),var(--glow);padding:12px 14px;display:flex;gap:12px;align-items:flex-start;animation:in .4s ease both;font-size:.9em}
+.toast.out{animation:out .35s ease forwards}
+.toast .em{font-size:24px}
+.toast b{display:block;color:var(--b2);font-size:.8em;letter-spacing:.08em;text-transform:uppercase}
+.toast a{text-decoration:none}
+.toast a:hover{text-decoration:underline}
+.toast small{color:var(--muted)}
+.toast button{margin-left:auto;background:none;border:0;color:var(--muted);cursor:pointer;font-size:18px;line-height:1}
+@keyframes in{from{opacity:0;transform:translateX(40px)}}
+@keyframes out{to{opacity:0;transform:translateX(40px)}}
+#panel{position:fixed;top:72px;right:18px;z-index:90;width:min(410px,calc(100vw - 36px));max-height:70vh;overflow:auto;background:rgba(8,18,60,.96);border:1px solid var(--line);border-radius:18px;box-shadow:0 20px 60px rgba(0,0,0,.6);padding:14px;display:none}
+#panel.open{display:block}
+#panel h4{margin:4px 6px 10px}
+#panel .it{display:flex;gap:10px;padding:10px 6px;border-top:1px solid var(--line);font-size:.9em}
+#panel .it small{color:var(--muted);display:block}
+#panel .it a{text-decoration:none}
+#panel .it a:hover{text-decoration:underline}
+@media (prefers-reduced-motion:reduce){*{animation:none!important}}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs><linearGradient id="ig" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#6ee7ff"/><stop offset="1" stop-color="#9b7bff"/></linearGradient></defs></svg>
+<canvas id="stars"></canvas>
+
+<header>
+  <div class="wrap nav">
+    <a class="logo" href="#top">🪐 AI <span>GALAXY</span></a>
+    <a class="l" href="#news" data-i="nav_news"></a>
+    <a class="l" href="#types" data-i="nav_types"></a>
+    <a class="l" href="#picker" data-i="nav_pick"></a>
+    <a class="l" href="#catalog" data-i="nav_cat"></a>
+    <a class="l" href="#learn" data-i="nav_learn"></a>
+    <a class="l" href="#faq" data-i="nav_faq"></a>
+    <div class="lang"><button id="bru">RU</button><button id="bkk">ҚАЗ</button><button id="ben">EN</button></div>
+    <button class="bell" id="bell" aria-label="News">🔔<b id="cnt">0</b></button>
+  </div>
+</header>
+<div class="ticker"><div id="tick"></div></div>
+<div id="panel"><h4 data-i="panel_t"></h4><div id="plist"></div></div>
+<div id="toasts" aria-live="polite"></div>
+
+<main id="top">
+<section class="hero">
+  <div class="wrap grid">
+    <div>
+      <span class="eyebrow" data-i="eyebrow"></span>
+      <h1><span data-i="h1a"></span> <em data-i="h1b"></em></h1>
+      <p data-i="hero_p"></p>
+      <div class="cta">
+        <a class="btn" href="#picker" data-i="cta1"></a>
+        <a class="btn ghost" href="#learn" data-i="cta2"></a>
+      </div>
+      <div class="stats">
+        <div><b id="s1">17</b><span data-i="st1"></span></div>
+        <div><b>7</b><span data-i="st2"></span></div>
+        <div><b>24/7</b><span data-i="st3"></span></div>
+      </div>
+    </div>
+    <div class="space" id="space">
+      <div class="aura"></div>
+      <div class="ringw"><i></i></div>
+      <canvas class="pl" id="hp" width="300" height="300"></canvas>
+      <div class="ringw front"><i></i></div>
+      <div class="glint"></div>
+      <div class="orbit-ring"></div><div class="orbit-ring orbit-ring2"></div>
+      <div class="rocket" aria-hidden="true"><svg viewBox="0 0 32 32"><defs><linearGradient id="rg" x1="0" x2="1"><stop offset="0" stop-color="#fff"/><stop offset="1" stop-color="#7ad7ff"/></linearGradient></defs><path d="M16 2c5 4 7 10 6 18l-3 3h-6l-3-3c-1-8 1-14 6-18z" fill="url(#rg)"/><circle cx="16" cy="12" r="2.6" fill="#1a4bd6"/><path d="M10 18l-5 6 5-1zM22 18l5 6-5-1z" fill="#4aa8ff"/><path d="M13 25c1 4 2 5 3 6 1-1 2-2 3-6z" fill="#ffb347"/></svg></div>
+    </div>
+  </div>
+</section>
+
+<section id="news">
+  <div class="wrap">
+    <div class="news-head">
+      <h2 data-i="news_h"></h2>
+      <span class="live" id="live"><i></i><span id="livet"></span></span>
+    </div>
+    <p class="lead" data-i="news_p"></p>
+    <div class="news" id="newsbox"></div>
+  </div>
+</section>
+
+<section id="types">
+  <canvas class="deco-planet r" id="dp1" width="300" height="300" aria-hidden="true"></canvas>
+  <div class="wrap">
+    <h2 data-i="types_h"></h2>
+    <p class="lead" data-i="types_p"></p>
+    <div class="types" id="typesbox"></div>
+  </div>
+</section>
+
+<section id="picker">
+  <div class="wrap">
+    <h2 data-i="pick_h"></h2>
+    <p class="lead" data-i="pick_p"></p>
+    <div class="picker glass">
+      <div class="q" data-i="pick_q1"></div>
+      <div class="chips" id="goals"></div>
+      <div class="q"><span data-i="pick_q2"></span> <small style="font-weight:400;color:var(--muted)" data-i="optional"></small></div>
+      <div class="chips" id="prefs"></div>
+      <div id="result"></div>
+    </div>
+  </div>
+</section>
+
+<section id="catalog">
+  <canvas class="deco-planet l" id="dp2" width="300" height="300" aria-hidden="true"></canvas>
+  <div class="wrap">
+    <h2 data-i="cat_h"></h2>
+    <p class="lead" data-i="cat_p"></p>
+    <div class="chips filters" id="filters"></div>
+    <div class="cards" id="cards"></div>
+  </div>
+</section>
+
+<section id="learn">
+  <div class="wrap">
+    <h2 data-i="learn_h"></h2>
+    <p class="lead" data-i="learn_p"></p>
+    <h3 data-i="first_h"></h3>
+    <div class="steps" id="first"></div>
+    <div class="formula"><h3 data-i="form_h"></h3><div class="parts" id="parts"></div></div>
+    <div class="compare" id="compare"></div>
+    <h3 class="sub" data-i="tpl_h"></h3>
+    <div class="prompts" id="prompts"></div>
+    <h3 class="sub" data-i="tips_h"></h3>
+    <div class="steps" id="tips"></div>
+    <h3 class="sub" data-i="safe_h"></h3>
+    <div class="safe" id="safe"></div>
+  </div>
+</section>
+
+<section id="faq">
+  <div class="wrap">
+    <h2 data-i="faq_h"></h2>
+    <p class="lead" data-i="faq_p"></p>
+    <div class="two"><div id="faq1"></div><div id="faq2"></div></div>
+  </div>
+</section>
+</main>
+
+<footer><div class="wrap"><p data-i="foot1"></p><p data-i="foot2"></p></div></footer>
+
+<script>
+/* ================== ЯЗЫК ================== */
+let LANG='ru';
+try{const s=localStorage.getItem('lang'),nl=(navigator.language||'ru').toLowerCase();LANG=s||(nl.startsWith('ru')?'ru':nl.startsWith('kk')?'kk':'en')}catch{}
+const KK={
+"News":"Жаңалықтар","AI types":"ЖИ түрлері","Finder":"Таңдау","Catalog":"Каталог","Learn":"Оқу","FAQ":"Сұрақтар",
+"🔔 Latest AI news":"🔔 ЖИ-дің соңғы жаңалықтары",
+"Your guide to the AI universe":"Жасанды интеллект әлеміне жол көрсеткіш",
+"Artificial intelligence":"Жасанды интеллект","in plain words":"қарапайым тілмен",
+"There are so many AI assistants that it is easy to get lost. Learn what AI is, what kinds exist, which one fits you best — and how to use it, step by step.":"ЖИ-көмекшілер соншалықты көп, адасып кету оңай. Мұнда ЖИ деген не екенін, қандай түрлері бар екенін, қайсысы сізге лайық екенін және онымен қалай жұмыс істеу керегін — қадам-қадаммен білесіз.",
+"🎯 Find my AI":"🎯 Өзіме ЖИ таңдау","📚 Learn how to use AI":"📚 ЖИ-мен жұмыс істеуді үйрену",
+"AIs in catalog":"каталогтағы ЖИ","types of AI":"ЖИ түрі","live news feed":"тікелей жаңалықтар легі",
+"AI news — live":"ЖИ жаңалықтары — тікелей эфирде",
+"Fresh headlines from the AI world. The feed refreshes itself and new stories pop up as notifications. Click a card to read the article.":"Нейрожелілер әлемінің жаңа тақырыптары. Лента өздігінен жаңарады, ал жаңа жаңалықтар хабарландыру болып шығады. Мақаланы оқу үшін карточканы басыңыз.",
+"live · updated":"эфирде · жаңартылды","offline — showing saved headlines":"байланыс жоқ — сақталған жаңалықтар көрсетілген","loading news…":"жаңалықтар жүктелуде…","Read ↗":"Оқу ↗","AI news":"ЖИ жаңалығы",
+"Types of AI":"ЖИ түрлері",
+"AI is a program trained on huge amounts of text, images and sound, so it can now create something similar on request. Each assistant has its own specialty — like doctors or craftsmen.":"ЖИ — үлкен көлемдегі мәтін, сурет және дыбыстан үйренген бағдарлама; ол енді сіздің өтінішіңіз бойынша соған ұқсас жаңа нәрсе жасай алады. Әр «көмекшінің» өз мамандығы бар — дәрігерлер немесе шеберлер сияқты.",
+"Not sure which AI to choose?":"Қай ЖИ таңдарыңызды білмейсіз бе?",
+"Tap what you want to do — we will suggest 2–3 good options with a button to open them right away.":"Не істегіңіз келетінін басыңыз — біз 2–3 лайықты нұсқа ұсынып, бірден ашатын түймені береміз.",
+"What do you need?":"Сізге не керек?","Any special conditions?":"Ерекше шарттар бар ма?","(optional)":"(міндетті емес)",
+"👆 Pick a task and we will suggest the best option.":"👆 Тапсырманы таңдаңыз — біз ең жақсы нұсқаны ұсынамыз.",
+"No perfect match in your ecosystem for this task — here are the best options.":"Бұл тапсырма үшін сіздің экожүйеңіздегі ЖИ тамаша сәйкес келмейді — міне, ең жақсы нұсқалар.",
+"top pick":"ең жақсы таңдау","Open":"Ашу","Open →":"Ашу →","click to open ↗":"ашу үшін басыңыз ↗",
+"AI catalog: details on each":"ЖИ каталогы: әрқайсысы туралы толық",
+"Click the picture or the “Open” button to go straight to that AI’s website in a new tab.":"Суретті немесе «Ашу» түймесін басыңыз — сіз бірден қажетті ЖИ сайтына жаңа бетте өтесіз.",
+"Best for:":"Ең қолайлысы:","Price:":"Бағасы:","Language support:":"Тіл қолдауы:",
+"Learn to work with AI":"ЖИ-мен жұмыс істеуді үйренеміз",
+"AI is not magic and not a regular search engine. It is a helper that needs a clear task. The clearer you ask, the better the result.":"ЖИ — сиқыршы да, кәдімгі іздеу жүйесі де емес. Бұл тапсырманы нақты түсіндіру керек көмекші. Сұрауыңыз неғұрлым анық болса, нәтиже соғұрлым жақсы.",
+"First steps in 5 minutes":"5 минуттағы алғашқы қадамдар",
+"🧩 The formula of a good request: Role + Task + Details + Format":"🧩 Жақсы сұраудың формуласы: Рөл + Тапсырма + Мәлімет + Формат",
+"Ready-made templates — copy and fill in your own":"Дайын шаблондар — көшіріп, өзіңіздікін қойыңыз",
+"5 handy tricks":"5 пайдалы тәсіл","Safety: what not to do":"Қауіпсіздік: нені істемеу керек",
+"📋 Copy":"📋 Көшіру","✅ Copied":"✅ Көшірілді",
+"FAQ and glossary":"Жиі қойылатын сұрақтар және сөздік","Unfamiliar words are no problem. Here are the most common ones.":"Түсініксіз сөздер — проблема емес. Міне, ең жиілері.",
+"Names and logos belong to their owners; this site is not affiliated with the listed services and is not advertising. Check terms, prices and regional availability on official sites — they change.":"Атаулар мен логотиптер өз иелеріне тиесілі; сайт аталған сервистермен байланысты емес және жарнама болып табылмайды. Шарттарды, бағаларды және өңіріңіздегі қолжетімділікті ресми сайттардан тексеріңіз — олар өзгеріп тұрады.",
+"News is loaded from public feeds (Habr, TechCrunch) and belongs to its authors.":"Жаңалықтар ашық лентадан (NUR.KZ, Хабр, TechCrunch) жүктеледі және олардың авторларына тиесілі.",
+"All":"Барлығы","💬 Chatbots":"💬 Чат-боттар","🔎 Search":"🔎 Іздеу","🎨 Images":"🎨 Суреттер","🎬 Video":"🎬 Бейне","🎵 Audio & music":"🎵 Дыбыс және музыка","📄 Docs & design":"📄 Құжаттар және дизайн","💻 Code":"💻 Код",
+"Chatbots (text)":"Чат-боттар (мәтін)","Answer questions, write emails and articles, explain hard topics, translate and brainstorm. Like chatting with a very well-read person.":"Сұрақтарға жауап береді, хаттар мен мақалалар жазады, күрделі нәрсені түсіндіреді, аударады, идея ойлап табады. Өте көп оқыған адаммен хат алмасқандай.",
+"Image generators":"Сурет салатындар","Describe what you want to see and get an illustration, logo or photo. You can even “revive” an old picture.":"Не көргіңіз келетінін сөзбен сипаттаңыз — иллюстрация, логотип немесе фото аласыз. Ескі суретті «жандандыруға» да болады.",
+"Video makers":"Бейне жасайтындар","Turn text or a picture into short clips — for ads, social media and fun.":"Мәтіннен немесе суреттен қысқа ролик жасайды — жарнамаға, әлеуметтік желіге және шығармашылыққа.",
+"Music & voice":"Музыка және дауыс","Compose a song from a description, read text in a realistic voice, turn speech into text.":"Сипаттама бойынша ән шығарады, мәтінді шынайы дауыспен оқиды, сөйлеуді мәтінге айналдырады.",
+"Smart search":"Ақылды іздеу","Search the web and give a ready answer with sources — no need to open ten sites.":"Интернеттен іздеп, дереккөздері бар дайын жауап береді — он сайтты ашудың керегі жоқ.",
+"Coding assistants":"Бағдарламашы көмекшілері","Write and review code, find bugs. Even a beginner can build a simple site or app.":"Код жазады және тексереді, қателерді табады. Жаңадан бастаушы да қарапайым сайт немесе бағдарлама жасай алады.",
+"Document helpers":"Құжаттармен жұмыс","Upload a book, contract or report — AI summarizes it, finds what you need and answers questions.":"Кітапты, шартты немесе есепті жүктеңіз — ЖИ мазмұндап береді, керегін табады және сұрақтарға жауап береді.",
+"Examples: ":"Мысалдар: ",
+"Free tier; paid tier for more":"Тегін нұсқасы бар; ақылысы — кеңірек","Handles many languages well":"Көптеген тілді жақсы түсінеді","People who want “one AI for everything”":"«Бәріне бір ЖИ» қалайтындар үшін",
+"The best-known chatbot. A universal helper: writes texts, answers questions, analyzes files, draws pictures and talks by voice.":"Ең танымал чат-бот. Әмбебап көмекші: мәтін жазады, сұрақтарға жауап береді, файлдарды талдайды, сурет салады және дауыспен сөйлеседі.",
+"Texts, emails, translations":"Мәтіндер, хаттар, аудармалар","Voice conversation":"Дауыспен сөйлесу","File and photo analysis":"Файл мен фотоны талдау","Image creation":"Сурет жасау",
+"A chatbot with a very natural, careful writing style. Great with long documents and code, rarely loses the thread.":"Жазу стилі өте табиғи әрі мұқият чат-бот. Ұзын құжаттармен және кодпен жақсы жұмыс істейді, әңгіме жібін сирек жоғалтады.",
+"Natural, well-written text":"Табиғи, сауатты мәтін","Reads big documents":"Үлкен құжаттарды оқиды","Help with programs":"Бағдарламаларға көмек","Image analysis":"Суретті талдау",
+"Emails, articles, documents and code":"Хаттар, мақалалар, құжаттар және код үшін","Free tier; paid tier for higher limits":"Тегін нұсқасы бар; ақылысында лимит көбірек",
+"Google’s AI. Closely tied to Gmail, Drive, YouTube and Maps — can find emails, summarize videos and work with your files.":"Google-дың ЖИ-і. Gmail, Drive, YouTube және карталармен тығыз байланысты — хаттарды табады, бейнелерді мазмұндайды және файлдарыңызбен жұмыс істейді.",
+"Works with Google services":"Google сервистерімен жұмыс істейді","Summarizes videos and documents":"Бейне мен құжатты мазмұндайды","Images and multimodal input":"Сурет және мультимодальды енгізу","Fast answers":"Жылдам жауаптар",
+"People living in the Google ecosystem":"Google экожүйесінде жүретіндер үшін","Free tier available":"Тегін нұсқасы бар",
+"Microsoft’s assistant with built-in web search. Built into Windows, Edge and Office (Word, Excel, PowerPoint).":"Microsoft-тың кіріктірілген интернет-іздеуі бар көмекшісі. Windows, Edge және Office (Word, Excel, PowerPoint) ішіне енгізілген.",
+"Answers with sources":"Дереккөзі бар жауаптар","Help in Word and Excel":"Word пен Excel-де көмек","Built into Windows":"Windows-қа кіріктірілген",
+"Windows and Office users":"Windows және Office пайдаланушылары үшін","Basic version is free":"Базалық нұсқасы тегін",
+"A “smart search engine”: searches the web and writes a ready answer with sources so you can verify it.":"«Ақылды іздеу жүйесі»: интернеттен іздеп, тексеруге болатындай дереккөздері бар дайын жауап жазады.",
+"Fresh information":"Жаңа ақпарат","Deep research mode":"Терең зерттеу режимі","Curated sources":"Іріктелген дереккөздер",
+"Finding facts, news and reviews":"Деректер, жаңалықтар және шолуларды іздеу үшін","Works in many languages":"Көптеген тілде жұмыс істейді",
+"A powerful chatbot, especially strong in math, logic and programming. Shows its reasoning before answering.":"Қуатты чат-бот, әсіресе математикада, логикада және бағдарламалауда күшті. Жауап бермес бұрын ойлау жолын көрсетеді.",
+"Step-by-step solutions":"Қадамдап шешу","Code and math":"Код және математика","Reasoning mode":"Ойлау режимі","Free to use":"Тегін пайдалану",
+"Problems, calculations and study":"Есептер, есептеулер және оқу үшін","Chat is mostly free":"Чат негізінен тегін","Understands many languages":"Көптеген тілді түсінеді",
+"Yandex’s Russian-language AI assistant. Knows Russian culture well, searches via Yandex, writes texts and draws images.":"Яндекстің орыс тіліндегі ЖИ-көмекшісі. Орыс мәдениетін жақсы біледі, Яндекс арқылы іздейді, мәтін жазады және сурет салады.",
+"Excellent Russian":"Тамаша орыс тілі","Search via Yandex":"Яндекс арқылы іздеу","Texts and ideas":"Мәтіндер мен идеялар","Images":"Суреттер",
+"Russian-language users":"Орыс тілінде сөйлейтіндер үшін","Available for free":"Тегін қолжетімді","Native Russian":"Ана тілі — орыс тілі",
+"Sber’s Russian AI. Writes texts, answers questions, creates images. Handy for Sber service users.":"Сбердің ресейлік ЖИ-і. Мәтін жазады, сұрақтарға жауап береді, сурет жасайды. Сбер сервистерін пайдаланушыларға ыңғайлы.",
+"Russian-language texts":"Орыс тіліндегі мәтіндер","Answers to questions":"Сұрақтарға жауап","Document work":"Құжаттармен жұмыс",
+"Users in Russia and Sber customers":"Ресей тұрғындары мен Сбер клиенттері үшін","Free access available":"Тегін қолжетімділік бар",
+"One of the best AIs for drawing. Very beautiful, artistic images: art, portraits, interiors, covers.":"Сурет салуға арналған ең жақсы ЖИ-дің бірі. Өте әдемі, «көркем» суреттер: арт, портрет, интерьер, мұқаба.",
+"High quality":"Жоғары сапа","Many styles":"Көп стильдер","Image editing":"Суретті өңдеу","Community gallery":"Қауымдастық галереясы",
+"Beautiful illustrations and design":"Әдемі иллюстрация мен дизайн үшін","Paid":"Ақылы","Best with English prompts":"Ағылшынша сұраулармен жақсырақ",
+"A Russian AI for images and short videos. Understands Russian prompts well and is easy to use.":"Сурет пен қысқа бейне жасауға арналған ресейлік ЖИ. Орысша сұрауларды жақсы түсінеді, қолдануға оңай.",
+"Images from text":"Мәтін бойынша суреттер","Short videos":"Қысқа бейнелер","Inpainting and edits":"Толықтыру және түзету","Russian prompts":"Орысша сұраулар",
+"Quick, simple pictures":"Жылдам, қарапайым суреттер үшін","Free attempts available":"Тегін әрекеттер бар",
+"An image platform with ready-made styles: game characters, fantasy, product photos, concept art.":"Дайын стильдері бар сурет платформасы: ойын кейіпкерлері, фэнтези, өнім фотолары, концепт-арт.",
+"Ready-made styles":"Дайын стильдер","Image editor":"Сурет редакторы","Game graphics":"Ойын графикасы","Daily free credits":"Күнделікті тегін кредиттер",
+"Characters, games and concept art":"Кейіпкерлер, ойындар және концепт-арт үшін","Free credits available":"Тегін кредиттер бар","Best in English":"Ағылшынша жақсырақ",
+"Makes video from text or an image and edits clips: removes backgrounds, changes objects, extends scenes.":"Мәтіннен немесе суреттен бейне жасайды және роликтерді өңдейді: фонды алады, нысандарды өзгертеді, көріністерді ұзартады.",
+"Video from text or image":"Мәтін немесе суреттен бейне","Remove objects and backgrounds":"Нысандар мен фонды жою","Editing tools":"Монтаж құралдары","Creative effects":"Шығармашылық эффектілер",
+"Short clips and ads":"Қысқа ролик пен жарнама үшін","Trial credits, then subscription":"Сынақ кредиттері, одан кейін жазылым",
+"Composes whole songs — lyrics, vocals and music — from a short description. Pick a genre and theme, AI does the rest.":"Қысқа сипаттама бойынша тұтас ән шығарады — сөзі, дауысы және музыкасымен. Жанр мен тақырыпты таңдаңыз, қалғанын ЖИ жасайды.",
+"A song in a minute":"Бір минутта ән","Any genre":"Кез келген жанр","Your lyrics → a song":"Өз өлеңіңіз → ән","Download tracks":"Тректерді жүктеу",
+"Greetings and music for videos":"Құттықтау мен бейнеге музыка үшін","Sings in many languages":"Көптеген тілде айтады",
+"Turns text into very natural speech in many languages. For video voice-overs, audiobooks and presentations.":"Мәтінді көптеген тілде өте табиғи сөйлеуге айналдырады. Бейнелерді, аудиокітаптар мен презентацияларды дыбыстауға.",
+"Realistic voices":"Шынайы дауыстар","Many languages":"Көп тіл","Voice-over for videos and books":"Бейне мен кітапты дыбыстау","Voice cloning (with permission)":"Дауысты клондау (рұқсатпен)",
+"Voice-overs and audiobooks":"Дыбыстау және аудиокітаптар үшін","Free plan available":"Тегін тариф бар","Speaks many languages":"Көптеген тілде сөйлейді",
+"Upload your documents, books or links — AI answers only from them, with citations. It can even make a “podcast” from your material.":"Құжаттарыңызды, кітаптарыңызды немесе сілтемелеріңізді жүктеңіз — ЖИ тек солар бойынша дәйексөзбен жауап береді. Материалыңыздан «подкаст» та жасай алады.",
+"Questions about your files":"Файлдарыңыз бойынша сұрақтар","Short summaries":"Қысқаша мазмұн","Audio overview as a podcast":"Подкаст түріндегі аудиошолу","Several sources at once":"Бірнеше дереккөз бірден",
+"Study, research and documents":"Оқу, зерттеу және құжаттар үшін",
+"A code editor with built-in AI. Describe what you need — it writes and fixes the program. Useful even for beginners.":"ЖИ кіріктірілген код редакторы. Не керегін сипаттаңыз — ол бағдарламаны жазып, түзетеді. Жаңадан бастаушыларға да пайдалы.",
+"Writes code from a description":"Сипаттама бойынша код жазады","Finds and fixes bugs":"Қателерді табады және түзетеді","Explains unfamiliar code":"Бөтен кодты түсіндіреді","Understands the whole project":"Бүкіл жобаны түсінеді",
+"Building sites and apps":"Сайттар мен бағдарламалар жасау үшін","Free plan; paid plan for more":"Тегін тариф бар; ақылысы — кеңірек","You can write in Russian":"Орысша жазуға болады",
+"A design tool with AI: makes presentations, posters and posts from a short description, removes backgrounds, extends images.":"ЖИ бар дизайн құрастырғышы: қысқа сипаттама бойынша презентация, афиша және пост жасайды, фонды алады, суреттерді толықтырады.",
+"Presentations from a prompt":"Сипаттама бойынша презентациялар","Social media templates":"Әлеуметтік желі шаблондары","AI photo editor":"ЖИ фоторедакторы","Background remover":"Фонды жою",
+"Presentations, posters and posts":"Презентация, афиша және постар үшін","Many interface languages":"Интерфейс көп тілде",
+"Write texts and emails":"Мәтін мен хат жазу","Answer a question / explain a topic":"Сұраққа жауап / тақырыпты түсіндіру","Find information online":"Интернеттен ақпарат табу","Draw a picture":"Сурет салу","Make a video":"Бейне жасау","Song or voice-over":"Ән немесе дыбыстау","Analyze a document or book":"Құжат немесе кітапты талдау","Presentation or poster":"Презентация немесе афиша","Build a program or website":"Бағдарлама немесе сайт жасау","Solve a math problem":"Математикалық есеп шығару","Study (language, school, courses)":"Оқу (тіл, мектеп, курстар)",
+"💸 I want it free":"💸 Тегін болсын","🇷🇺 Needs Russian language":"🇷🇺 Орыс тілі керек","🏢 I use Microsoft Office":"🏢 Microsoft Office қолданамын","📧 I use Google services":"📧 Google сервистерін қолданамын",
+"Universal — handles almost any task.":"Әмбебап — кез келген дерлік тапсырманы атқарады.","Writes carefully and naturally, great with long texts.":"Мұқият әрі табиғи жазады, ұзын мәтіндермен жақсы.","Works with Google services, handles video and files.":"Google сервистерімен жұмыс істейді, бейне мен файлдарды өңдейді.","Searches the web, built into Windows and Office.":"Интернеттен іздейді, Windows пен Office-ке кіріктірілген.","Gives answers with sources — easy to verify.":"Дереккөзі бар жауап береді — тексеру оңай.","Strong in logic and math, shows solutions step by step.":"Логика мен математикада күшті, шешімді қадамдап көрсетеді.","Knows Russian language and context very well.":"Орыс тілін және контекстін өте жақсы біледі.","Russian service, handy for Sber customers.":"Ресейлік сервис, Сбер клиенттеріне ыңғайлы.","The most beautiful artistic images.":"Ең әдемі «көркем» суреттер.","Understands Russian prompts, easy to use.":"Орысша сұрауларды түсінеді, қолдануға оңай.","Many ready styles for art and characters.":"Арт пен кейіпкерлерге арналған көп дайын стиль.","A leader among video-creation tools.":"Бейне жасау құралдарының көшбасшысы.","Composes a whole song from a description.":"Сипаттама бойынша тұтас ән шығарады.","The most natural text-to-speech.":"Мәтінді ең табиғи дыбыстау.","Answers strictly from your documents.":"Тек сіздің құжаттарыңыз бойынша жауап береді.","An editor where AI writes the program for you.":"ЖИ сіздің орныңызға бағдарлама жазатын редактор.","Presentations and posters in minutes.":"Презентация мен афиша — бірнеше минутта.",
+"Open any chatbot":"Кез келген чат-ботты ашыңыз","Click “Open” in the catalog. You often need to sign up — an email or Google account is enough.":"Каталогтағы «Ашу» түймесін басыңыз. Жиі тіркелу керек — поштаңыз немесе Google аккаунтыңыз жеткілікті.",
+"Write the task in plain words":"Тапсырманы қарапайым сөзбен жазыңыз","As if explaining to a person. No special commands needed.":"Адамға түсіндіргендей. Арнайы командаларды білудің керегі жоқ.",
+"Read and refine":"Оқып, нақтылаңыз","Not happy? Write: “Make it shorter”, “Simpler”, “Add an example”. AI remembers the whole chat.":"Ұнамады ма? Жазыңыз: «Қысқарт», «Қарапайым ет», «Мысал қос». ЖИ бүкіл әңгімені есте сақтайды.",
+"Verify what matters":"Маңыздысын тексеріңіз","Numbers, dates, medicine, laws — check with reliable sources. AI sometimes makes mistakes.":"Сандар, күндер, дәрі-дәрмек, заңдар — сенімді дереккөздермен тексеріңіз. ЖИ кейде қателеседі.",
+"1. Role":"1. Рөл","Who the AI should be: “You are an English teacher”":"ЖИ кім болуы керек: «Сен — ағылшын тілі мұғалімісің»","2. Task":"2. Тапсырма","What to do: “explain verb tenses”":"Не істеу керек: «етістік шақтарын түсіндір»","3. Details":"3. Мәліметтер","For whom and why: “I am 50, starting from zero”":"Кім үшін және не үшін: «мен 50 жастамын, нөлден бастаймын»","4. Format":"4. Формат","How to answer: “short, as a list, with examples”":"Қалай жауап беру керек: «қысқа, тізім түрінде, мысалдармен»",
+"❌ Bad request":"❌ Нашар сұрау","Tell me about English":"Маған ағылшын тілі туралы айтшы","Too vague — you will get a long generic text.":"Тым бұлыңғыр — ұзын, жалпы мәтін шығады.","✅ Good request":"✅ Жақсы сұрау",
+"You are a patient English teacher. I am a beginner, 50 years old. Explain in simple words the difference between Present Simple and Present Continuous. Give 3 examples each and a short 3-question quiz.":"Сен — шыдамды ағылшын тілі мұғалімісің. Мен жаңадан бастаушымын, 50 жастамын. Present Simple мен Present Continuous айырмашылығын қарапайым сөзбен түсіндір. Әрқайсысына 3 мысал және 3 сұрақтан тұратын қысқа тест бер.","Clear who, for whom, and in what form.":"Кім, кім үшін және қандай түрде екені анық.",
+"✉️ Business email":"✉️ Іскери хат","You are an experienced business-writing assistant. Write a polite email to [whom] about [what]. Respectful tone, no jargon. Max 120 words.":"Сен — іскери хат алмасу бойынша тәжірибелі көмекшісің. [кімге] [не туралы] сыпайы хат жаз. Тон — құрметті, шаблонсыз. 120 сөзден аспасын.",
+"🧑‍🏫 Explain a topic":"🧑‍🏫 Тақырыпты түсіндіру","Explain in simple words what [topic] is, as if I were 12. Give 2 everyday examples and finish with 3 questions to check my understanding.":"[Тақырып] деген не екенін мен 12 жастағыдай қарапайым сөзбен түсіндір. Күнделікті өмірден 2 мысал келтір және түсінгенімді тексеру үшін 3 сұрақ қой.",
+"🍲 Recipe from what I have":"🍲 Қолымдағы өнімнен рецепт","I have at home: [ingredients]. Suggest 3 easy dinner dishes with cooking time and step-by-step recipes.":"Үйімде бар: [өнімдер]. Кешкі асқа 3 оңай тағам ұсын: дайындау уақыты және қадамдық рецепті.",
+"📄 Summarize a document":"📄 Құжатты мазмұндау","Here is the text: [paste]. Summarize the main points in 5 bullets, then list all dates, amounts and deadlines separately.":"Міне мәтін: [қойыңыз]. Негізгісін 5 тармақпен мазмұндап бер, содан соң барлық күндерді, сомаларды және мерзімдерді бөлек тізіммен жаз.",
+"🎨 Image prompt":"🎨 Сурет сипаттамасы","Draw [what], style — [watercolor / photo / cartoon], lighting — [soft / sunset], mood — [warm, cozy]. Landscape format.":"[Не] сал, стиль — [акварель / фото / мультфильм], жарық — [жұмсақ / күн батуы], көңіл-күй — [жылы, жайлы]. Көлденең формат.",
+"🌍 Learning a language":"🌍 Тіл үйренуде","You are a [language] tutor. My level is [beginner]. Let’s talk about “[topic]”: you ask, I answer, you correct my mistakes and explain briefly.":"Сен — [тіл] репетиторысың. Деңгейім — [бастапқы]. «[Тақырып]» туралы сөйлесейік: сен сұрайсың, мен жауап беремін, сен қателерімді түзетіп, қысқаша түсіндіресің.",
+"💼 Interview prep":"💼 Сұхбатқа дайындық","I have an interview for [position]. Ask me 10 likely questions one by one. After each answer, rate it and suggest improvements.":"Мен [лауазым] қызметіне сұхбатқа барамын. Ықтимал 10 сұрақты біртіндеп қой. Әр жауаптан кейін бағала және қалай жақсартуға болатынын айт.",
+"🧭 Weekly plan":"🧭 Апталық жоспар","Help me make a plan for the week. Goal: [goal]. Free time: [hours per day]. Split it into small daily steps and tell me what to do if I miss something.":"Аптаға жоспар құруға көмектес. Мақсат: [мақсат]. Бос уақыт: [күніне сағат]. Оны шағын күнделікті қадамдарға бөл және бірдеңені өткізіп алсам, не істеу керегін айт.",
+"Ask it to ask":"Сұрақ қоюын сұраңыз","Add: “If you lack information, ask me questions first.”":"Қосыңыз: «Дерек жетпесе, алдымен маған сұрақ қой».",
+"Give an example":"Мысал беріңіз","“Write in this style: …” — and paste a sample.":"«Мына стильде жаз: …» — деп үлгіні қойыңыз.",
+"Split into parts":"Бөліктерге бөліңіз","Split big tasks: first an outline, then each section separately.":"Күрделі тапсырманы бөліңіз: алдымен жоспар, содан кейін әр бөлімді бөлек.",
+"Ask for an explanation":"Түсіндіруді сұраңыз","“Explain like I’m 10” — works with any topic.":"«Мен 10 жастағыдай түсіндір» — кез келген тақырыпта жұмыс істейді.",
+"Start fresh":"Қайтадан бастаңыз","If the chat got messy, open a new one and state the task cleanly.":"Әңгіме шатасып кетсе, жаңа чат ашып, тапсырманы анығырақ жазыңыз.",
+"🔒 Never enter passwords or card data":"🔒 Құпиясөз бен карта деректерін енгізбеңіз","Never — in any chat.":"Ешқашан — ешбір чатқа.","📑 Don’t upload secrets":"📑 Құпияларды жүктемеңіз","Work contracts and clients’ personal data — only if allowed.":"Жұмыс шарттары мен клиенттердің жеке деректері — тек рұқсат болса ғана.","🩺 Don’t self-treat via AI":"🩺 ЖИ-ге қарап емделмеңіз","For health and legal matters see a doctor or lawyer. AI only helps you understand.":"Денсаулық пен заң мәселелері бойынша дәрігерге және заңгерге барыңыз. ЖИ тек түсінуге көмектеседі.","🎭 Beware of fakes":"🎭 Жасандылардан сақ болыңыз","Voices and videos can be faked. If a “relative” asks for money — call them back yourself.":"Дауыс пен бейнені жалған жасауға болады. «Туысыңыз» ақша сұраса — өзіңіз қайта қоңырау шалыңыз.",
+"Is AI paid?":"ЖИ ақылы ма?","Most have a free version with limits (requests per day). Paid plans give smarter models and more features. Free is almost always enough to start.":"Көбінің шектеулері бар (күніне сұрау саны) тегін нұсқасы болады. Ақылы жазылым ақылдырақ модельдер мен көбірек мүмкіндік береді. Бастау үшін тегіні әрдайым дерлік жеткілікті.",
+"Will AI replace people?":"ЖИ адамдарды алмастыра ма?","It takes over routine: drafts, search, sorting. People still make decisions, check results and take responsibility. Those who can work with AI gain an edge.":"Ол күнделікті жұмысты алады: жоба мәтіндер, іздеу, сұрыптау. Шешім қабылдау, тексеру және жауапкершілік әлі де адамда. ЖИ-мен жұмыс істей алатын адам артықшылық алады.",
+"Why does AI sometimes make things up?":"ЖИ неге кейде ойдан шығарады?","It does not “know” facts — it picks the most likely words, so it can state falsehoods confidently. This is called a “hallucination”. Verify important things; search-based AI (Perplexity) gives sources.":"Ол деректерді «білмейді» — ең ықтимал сөздерді таңдайды, сондықтан өтірікті сеніммен айтуы мүмкін. Бұл «галлюцинация» деп аталады. Маңызды нәрсені тексеріңіз; іздеуі бар ЖИ (Perplexity) сілтеме береді.",
+"Do I need a VPN?":"VPN керек пе?","Some services are unavailable in certain countries or regions. If one does not open, try another. Terms on the service’s site may change.":"Кейбір сервистер белгілі бір елдер мен өңірлерде қолжетімсіз. Біреуі ашылмаса — басқасын байқап көріңіз. Сервис сайтындағы шарттар өзгеруі мүмкін.",
+"Can anyone see my chats?":"Менің әңгімелерімді біреу көре ме?","Services may store chats and use them to improve. Settings usually let you turn history off. Don’t write secrets there.":"Сервистер әңгімелерді сақтап, жақсарту үшін пайдалануы мүмкін. Баптауларда тарихты өшіруге болады. Онда құпияларды жазбаңыз.",
+"Prompt":"Промпт","Your request to the AI — what you write to it.":"ЖИ-ге сұрауыңыз — оған жазған мәтініңіз.","Neural network":"Нейрожелі","A brain-inspired program that learned to find patterns in huge amounts of data.":"Миға ұқсас құрылған, үлкен деректерден заңдылықтарды табуды үйренген бағдарлама.","Model":"Модель","The “brain” of a specific AI. One service may have several: fast and simple, or slower and smarter.":"Нақты ЖИ-дің «миы». Бір сервисте бірнеше болуы мүмкін: жылдам әрі қарапайым немесе баяуырақ әрі ақылдырақ.","Token":"Токен","A piece of a word. Limits and prices are often counted in tokens: about 3–4 letters each.":"Сөздің бөлшегі. Лимит пен баға жиі токенмен есептеледі: шамамен 3–4 әріп.","Context":"Контекст","Everything the AI “remembers” in the current chat. A very long chat starts fading — start a new one.":"ЖИ ағымдағы әңгімеде «есінде сақтайтын» барлық нәрсе. Тым ұзақ әңгіме ұмытыла бастайды — жаңасын бастаңыз.","Multimodal AI":"Мультимодальды ЖИ","Understands not just text but images, sound and documents. Snap a photo of a foreign menu and ask for a translation.":"Тек мәтінді емес, суретті, дыбысты және құжатты да түсінеді. Шетел тіліндегі мәзірді суретке түсіріп, аударуды сұраңыз."
+};
+const T=o=>{if(o==null)return '';if(typeof o==='string')return o;if(LANG==='kk'){const e=o.en;return Array.isArray(e)?e.map(x=>KK[x]||x):(KK[e]||e)}return o[LANG]};
+
+const UI={
+ nav_news:{ru:'Новости',en:'News'},nav_types:{ru:'Виды ИИ',en:'AI types'},nav_pick:{ru:'Подбор',en:'Finder'},nav_cat:{ru:'Каталог',en:'Catalog'},nav_learn:{ru:'Обучение',en:'Learn'},nav_faq:{ru:'Вопросы',en:'FAQ'},
+ panel_t:{ru:'🔔 Свежие новости ИИ',en:'🔔 Latest AI news'},
+ eyebrow:{ru:'Путеводитель по миру нейросетей',en:'Your guide to the AI universe'},
+ h1a:{ru:'Искусственный интеллект',en:'Artificial intelligence'},h1b:{ru:'простыми словами',en:'in plain words'},
+ hero_p:{ru:'ИИ-помощников стало так много, что глаза разбегаются. Здесь вы узнаете, что это такое, какие бывают виды, какой выбрать именно вам и научитесь с ними работать — шаг за шагом.',
+         en:'There are so many AI assistants that it is easy to get lost. Learn what AI is, what kinds exist, which one fits you best — and how to use it, step by step.'},
+ cta1:{ru:'🎯 Подобрать мой ИИ',en:'🎯 Find my AI'},cta2:{ru:'📚 Научиться пользоваться',en:'📚 Learn how to use AI'},
+ st1:{ru:'ИИ в каталоге',en:'AIs in catalog'},st2:{ru:'видов ИИ',en:'types of AI'},st3:{ru:'живая лента новостей',en:'live news feed'},
+ news_h:{ru:'Новости ИИ — в реальном времени',en:'AI news — live'},
+ news_p:{ru:'Свежие заголовки из мира нейросетей. Лента обновляется сама, а новые новости всплывают уведомлениями. Нажмите на карточку, чтобы прочитать статью.',
+         en:'Fresh headlines from the AI world. The feed refreshes itself and new stories pop up as notifications. Click a card to read the article.'},
+ live_on:{ru:'в эфире · обновлено',en:'live · updated'},live_off:{ru:'нет связи — показаны сохранённые новости',en:'offline — showing saved headlines'},live_load:{ru:'загрузка новостей…',en:'loading news…'},
+ read:{ru:'Читать ↗',en:'Read ↗'},src_ru:{ru:'Хабр',en:'Habr'},src_en:{ru:'TechCrunch',en:'TechCrunch'},
+ toast_t:{ru:'Новость ИИ',en:'AI news'},
+ types_h:{ru:'Какие бывают ИИ',en:'Types of AI'},
+ types_p:{ru:'ИИ — это программа, которая училась на огромном количестве текстов, картинок и звуков, и теперь умеет создавать что-то похожее по вашей просьбе. У каждого «помощника» своя специальность — как у врачей или мастеров.',
+          en:'AI is a program trained on huge amounts of text, images and sound, so it can now create something similar on request. Each assistant has its own specialty — like doctors or craftsmen.'},
+ pick_h:{ru:'Не знаете, какой ИИ выбрать?',en:'Not sure which AI to choose?'},
+ pick_p:{ru:'Нажмите, что хотите сделать, — мы подскажем 2–3 подходящих варианта и сразу дадим кнопку для перехода.',en:'Tap what you want to do — we will suggest 2–3 good options with a button to open them right away.'},
+ pick_q1:{ru:'Что вам нужно?',en:'What do you need?'},pick_q2:{ru:'Есть ли особые условия?',en:'Any special conditions?'},optional:{ru:'(необязательно)',en:'(optional)'},
+ pick_empty:{ru:'👆 Выберите задачу — и мы подскажем лучший вариант.',en:'👆 Pick a task and we will suggest the best option.'},
+ pick_note:{ru:'Для этой задачи ИИ из вашей экосистемы не подходит идеально — вот лучшие варианты.',en:'No perfect match in your ecosystem for this task — here are the best options.'},
+ best_choice:{ru:'лучший выбор',en:'top pick'},open:{ru:'Открыть',en:'Open'},open_arrow:{ru:'Открыть →',en:'Open →'},click_open:{ru:'нажмите, чтобы открыть ↗',en:'click to open ↗'},
+ cat_h:{ru:'Каталог ИИ: подробно о каждом',en:'AI catalog: details on each'},
+ cat_p:{ru:'Нажмите на картинку или кнопку «Открыть» — вы сразу перейдёте на сайт нужного ИИ в новой вкладке.',en:'Click the picture or the “Open” button to go straight to that AI’s website in a new tab.'},
+ best_for:{ru:'Лучше всего для:',en:'Best for:'},price:{ru:'Цена:',en:'Price:'},rulang:{ru:'Русский язык:',en:'Language support:'},
+ learn_h:{ru:'Учимся работать с ИИ',en:'Learn to work with AI'},
+ learn_p:{ru:'ИИ — не волшебник и не обычный поисковик. Это помощник, которому нужно чётко объяснить задачу. Чем яснее вы просите, тем лучше результат.',en:'AI is not magic and not a regular search engine. It is a helper that needs a clear task. The clearer you ask, the better the result.'},
+ first_h:{ru:'Первые шаги за 5 минут',en:'First steps in 5 minutes'},
+ form_h:{ru:'🧩 Формула хорошей просьбы: Роль + Задача + Детали + Формат',en:'🧩 The formula of a good request: Role + Task + Details + Format'},
+ tpl_h:{ru:'Готовые шаблоны — скопируйте и подставьте своё',en:'Ready-made templates — copy and fill in your own'},
+ tips_h:{ru:'5 полезных приёмов',en:'5 handy tricks'},safe_h:{ru:'Безопасность: чего не стоит делать',en:'Safety: what not to do'},
+ copy:{ru:'📋 Скопировать',en:'📋 Copy'},copied:{ru:'✅ Скопировано',en:'✅ Copied'},
+ faq_h:{ru:'Частые вопросы и словарик',en:'FAQ and glossary'},faq_p:{ru:'Непонятные слова — не проблема. Вот самые частые.',en:'Unfamiliar words are no problem. Here are the most common ones.'},
+ foot1:{ru:'Названия и логотипы принадлежат их владельцам; сайт не связан с перечисленными сервисами и не является рекламой. Условия, цены и доступность в вашем регионе уточняйте на официальных сайтах — они меняются.',
+        en:'Names and logos belong to their owners; this site is not affiliated with the listed services and is not advertising. Check terms, prices and regional availability on official sites — they change.'},
+ foot2:{ru:'Новости загружаются из открытых лент (Хабр, TechCrunch) и принадлежат их авторам.',en:'News is loaded from public feeds (Habr, TechCrunch) and belongs to its authors.'}
+};
+
+const CATS={all:{ru:'Все',en:'All'},text:{ru:'💬 Чат-боты',en:'💬 Chatbots'},search:{ru:'🔎 Поиск',en:'🔎 Search'},image:{ru:'🎨 Картинки',en:'🎨 Images'},video:{ru:'🎬 Видео',en:'🎬 Video'},audio:{ru:'🎵 Звук и музыка',en:'🎵 Audio & music'},docs:{ru:'📄 Документы и дизайн',en:'📄 Docs & design'},code:{ru:'💻 Код',en:'💻 Code'}};
+
+const TYPES=[
+ ['💬',{ru:'Чат-боты (текст)',en:'Chatbots (text)'},{ru:'Отвечают на вопросы, пишут письма и статьи, объясняют сложное, переводят, придумывают идеи. Как переписка с очень начитанным человеком.',en:'Answer questions, write emails and articles, explain hard topics, translate and brainstorm. Like chatting with a very well-read person.'},'ChatGPT, Claude, Gemini, GigaChat'],
+ ['🎨',{ru:'Рисуют картинки',en:'Image generators'},{ru:'Опишите словами, что хотите увидеть, — получите иллюстрацию, логотип или фото. Можно «оживить» старый снимок.',en:'Describe what you want to see and get an illustration, logo or photo. You can even “revive” an old picture.'},'Midjourney, Kandinsky, Leonardo'],
+ ['🎬',{ru:'Создают видео',en:'Video makers'},{ru:'Из текста или картинки делают короткие ролики — для рекламы, соцсетей и творчества.',en:'Turn text or a picture into short clips — for ads, social media and fun.'},'Runway'],
+ ['🎵',{ru:'Музыка и голос',en:'Music & voice'},{ru:'Сочиняют песню по описанию, озвучивают текст реалистичным голосом, превращают речь в текст.',en:'Compose a song from a description, read text in a realistic voice, turn speech into text.'},'Suno, ElevenLabs'],
+ ['🔎',{ru:'Умный поиск',en:'Smart search'},{ru:'Ищут в интернете и сразу дают готовый ответ со ссылками — не нужно открывать десять сайтов.',en:'Search the web and give a ready answer with sources — no need to open ten sites.'},'Perplexity, Copilot'],
+ ['💻',{ru:'Помощники программиста',en:'Coding assistants'},{ru:'Пишут и проверяют код, находят ошибки. Даже новичок может сделать простой сайт или программу.',en:'Write and review code, find bugs. Even a beginner can build a simple site or app.'},'Cursor, GitHub Copilot'],
+ ['📄',{ru:'Работа с документами',en:'Document helpers'},{ru:'Загрузите книгу, договор или отчёт — ИИ перескажет, найдёт нужное и ответит на вопросы по тексту.',en:'Upload a book, contract or report — AI summarizes it, finds what you need and answers questions.'},'NotebookLM, Claude, ChatGPT']
+];
+
+/* ================== КАТАЛОГ ================== */
+const fav=d=>`https://www.google.com/s2/favicons?domain=${d}&sz=128`;
+const A=(id,name,by,cat,url,dom,color,d,f,best,price,lang)=>({id,name,by,cat,url,dom,color,d,f,best,price,lang});
+const AIS=[
+ A('chatgpt','ChatGPT','OpenAI','text','https://chatgpt.com','chatgpt.com','#10a37f,#0a3d6b',
+  {ru:'Самый известный чат-бот. Универсальный помощник на все случаи: пишет тексты, отвечает на вопросы, анализирует файлы, рисует картинки и умеет общаться голосом.',en:'The best-known chatbot. A universal helper: writes texts, answers questions, analyzes files, draws pictures and talks by voice.'},
+  {ru:['Тексты, письма, переводы','Голосовой разговор','Анализ файлов и фото','Создание картинок'],en:['Texts, emails, translations','Voice conversation','File and photo analysis','Image creation']},
+  {ru:'Для тех, кто хочет «один ИИ на всё»',en:'People who want “one AI for everything”'},{ru:'Есть бесплатная версия, платная — расширенная',en:'Free tier; paid tier for more'},{ru:'Хорошо понимает русский',en:'Handles many languages well'}),
+ A('claude','Claude','Anthropic','text','https://claude.ai','claude.ai','#d97757,#3b2a8f',
+  {ru:'Чат-бот с очень «человечным» и аккуратным стилем письма. Отлично работает с длинными документами и кодом, редко теряет нить разговора.',en:'A chatbot with a very natural, careful writing style. Great with long documents and code, rarely loses the thread.'},
+  {ru:['Живой, грамотный текст','Чтение больших документов','Помощь с программами','Анализ изображений'],en:['Natural, well-written text','Reads big documents','Help with programs','Image analysis']},
+  {ru:'Для писем, статей, документов и кода',en:'Emails, articles, documents and code'},{ru:'Есть бесплатная версия, платная — больше лимитов',en:'Free tier; paid tier for higher limits'},{ru:'Хорошо понимает русский',en:'Handles many languages well'}),
+ A('gemini','Gemini','Google','text','https://gemini.google.com','gemini.google.com','#4285f4,#8b5cf6',
+  {ru:'ИИ от Google. Тесно связан с Gmail, Диском, YouTube и картами — может искать письма, пересказывать видео и работать с вашими файлами.',en:'Google’s AI. Closely tied to Gmail, Drive, YouTube and Maps — can find emails, summarize videos and work with your files.'},
+  {ru:['Связь с сервисами Google','Пересказ видео и документов','Картинки и мультимодальность','Быстрые ответы'],en:['Works with Google services','Summarizes videos and documents','Images and multimodal input','Fast answers']},
+  {ru:'Для тех, кто живёт в экосистеме Google',en:'People living in the Google ecosystem'},{ru:'Есть бесплатная версия',en:'Free tier available'},{ru:'Хорошо понимает русский',en:'Handles many languages well'}),
+ A('copilot','Microsoft Copilot','Microsoft','text','https://copilot.microsoft.com','copilot.microsoft.com','#2563eb,#06b6d4',
+  {ru:'Помощник от Microsoft со встроенным поиском в интернете. Встроен в Windows, Edge и Office (Word, Excel, PowerPoint).',en:'Microsoft’s assistant with built-in web search. Built into Windows, Edge and Office (Word, Excel, PowerPoint).'},
+  {ru:['Ответы со ссылками','Помощь в Word и Excel','Создание картинок','Встроен в Windows'],en:['Answers with sources','Help in Word and Excel','Image creation','Built into Windows']},
+  {ru:'Для пользователей Windows и Office',en:'Windows and Office users'},{ru:'Базовая версия бесплатна',en:'Basic version is free'},{ru:'Хорошо понимает русский',en:'Handles many languages well'}),
+ A('perplexity','Perplexity','Perplexity AI','search','https://www.perplexity.ai','perplexity.ai','#20808d,#1a2a6c',
+  {ru:'«Умный поисковик»: ищет в интернете и пишет готовый ответ с указанием источников, чтобы можно было проверить.',en:'A “smart search engine”: searches the web and writes a ready answer with sources so you can verify it.'},
+  {ru:['Ответы со ссылками','Свежая информация','Глубокое исследование','Подборка источников'],en:['Answers with sources','Fresh information','Deep research mode','Curated sources']},
+  {ru:'Для поиска фактов, новостей и обзоров',en:'Finding facts, news and reviews'},{ru:'Есть бесплатная версия',en:'Free tier available'},{ru:'Работает на русском',en:'Works in many languages'}),
+ A('deepseek','DeepSeek','DeepSeek','text','https://chat.deepseek.com','deepseek.com','#4d6bfe,#1b2a7a',
+  {ru:'Мощный чат-бот, особенно сильный в математике, логике и программировании. Показывает ход рассуждений перед ответом.',en:'A powerful chatbot, especially strong in math, logic and programming. Shows its reasoning before answering.'},
+  {ru:['Решение задач по шагам','Код и математика','Режим рассуждения','Бесплатное использование'],en:['Step-by-step solutions','Code and math','Reasoning mode','Free to use']},
+  {ru:'Для задач, расчётов и учёбы',en:'Problems, calculations and study'},{ru:'Чат в основном бесплатный',en:'Chat is mostly free'},{ru:'Понимает русский',en:'Understands many languages'}),
+ A('alice','Алиса AI (Яндекс)','Yandex','text','https://alice.yandex.ru','alice.yandex.ru','#a855f7,#3b1d9a',
+  {ru:'Российский ИИ-помощник от Яндекса. Хорошо знает русскую культуру и реалии, ищет в Яндексе, пишет тексты и рисует картинки.',en:'Yandex’s Russian-language AI assistant. Knows Russian culture well, searches via Yandex, writes texts and draws images.'},
+  {ru:['Отличный русский язык','Поиск через Яндекс','Тексты и идеи','Картинки'],en:['Excellent Russian','Search via Yandex','Texts and ideas','Images']},
+  {ru:'Для тех, кому нужен ИИ на русском',en:'Russian-language users'},{ru:'Доступна бесплатно',en:'Available for free'},{ru:'Родной русский',en:'Native Russian'}),
+ A('giga','GigaChat','Sber','text','https://giga.chat','giga.chat','#21a038,#0b4f6a',
+  {ru:'Российский ИИ от Сбера. Пишет тексты, отвечает на вопросы, создаёт картинки. Удобен пользователям сервисов Сбера.',en:'Sber’s Russian AI. Writes texts, answers questions, creates images. Handy for Sber service users.'},
+  {ru:['Русскоязычные тексты','Создание изображений','Ответы на вопросы','Работа с документами'],en:['Russian-language texts','Image creation','Answers to questions','Document work']},
+  {ru:'Для жителей России и клиентов Сбера',en:'Users in Russia and Sber customers'},{ru:'Есть бесплатный доступ',en:'Free access available'},{ru:'Родной русский',en:'Native Russian'}),
+ A('midjourney','Midjourney','Midjourney','image','https://www.midjourney.com','midjourney.com','#1e3a8a,#6d28d9',
+  {ru:'Один из лучших ИИ для рисования. Картинки очень красивые, «художественные»: арты, портреты, интерьеры, обложки.',en:'One of the best AIs for drawing. Very beautiful, artistic images: art, portraits, interiors, covers.'},
+  {ru:['Высокое качество','Множество стилей','Редактирование изображений','Сообщество и галерея'],en:['High quality','Many styles','Image editing','Community gallery']},
+  {ru:'Для красивых иллюстраций и дизайна',en:'Beautiful illustrations and design'},{ru:'Платный',en:'Paid'},{ru:'Лучше писать запросы на английском',en:'Best with English prompts'}),
+ A('kandinsky','Kandinsky','Sber / FusionBrain','image','https://fusionbrain.ai','fusionbrain.ai','#ec4899,#4f46e5',
+  {ru:'Российский ИИ для создания картинок и коротких видео. Хорошо понимает запросы на русском, прост в использовании.',en:'A Russian AI for images and short videos. Understands Russian prompts well and is easy to use.'},
+  {ru:['Картинки по описанию','Короткие видео','Дорисовка и правки','Запросы на русском'],en:['Images from text','Short videos','Inpainting and edits','Russian prompts']},
+  {ru:'Для быстрых картинок без сложностей',en:'Quick, simple pictures'},{ru:'Бесплатные попытки есть',en:'Free attempts available'},{ru:'Родной русский',en:'Native Russian'}),
+ A('leonardo','Leonardo AI','Leonardo.Ai','image','https://leonardo.ai','leonardo.ai','#f59e0b,#7c2d12',
+  {ru:'Платформа для картинок с набором готовых стилей: игровые персонажи, фэнтези, продуктовые фото, концепт-арт.',en:'An image platform with ready-made styles: game characters, fantasy, product photos, concept art.'},
+  {ru:['Готовые стили','Редактор изображений','Игровая графика','Ежедневные бесплатные кредиты'],en:['Ready-made styles','Image editor','Game graphics','Daily free credits']},
+  {ru:'Для персонажей, игр и концепт-арта',en:'Characters, games and concept art'},{ru:'Есть бесплатные кредиты',en:'Free credits available'},{ru:'Лучше на английском',en:'Best in English'}),
+ A('runway','Runway','Runway','video','https://runwayml.com','runwayml.com','#0ea5e9,#312e81',
+  {ru:'Создаёт видео из текста или картинки и редактирует ролики: убирает фон, меняет объекты, продлевает сцены.',en:'Makes video from text or an image and edits clips: removes backgrounds, changes objects, extends scenes.'},
+  {ru:['Видео из текста и картинки','Удаление объектов и фона','Инструменты монтажа','Креативные эффекты'],en:['Video from text or image','Remove objects and backgrounds','Editing tools','Creative effects']},
+  {ru:'Для коротких роликов и рекламы',en:'Short clips and ads'},{ru:'Пробные кредиты, далее подписка',en:'Trial credits, then subscription'},{ru:'Лучше на английском',en:'Best in English'}),
+ A('suno','Suno','Suno','audio','https://suno.com','suno.com','#f43f5e,#4c1d95',
+  {ru:'Сочиняет песни целиком — со словами, голосом и музыкой — по короткому описанию. Выбираете жанр и тему, остальное делает ИИ.',en:'Composes whole songs — lyrics, vocals and music — from a short description. Pick a genre and theme, AI does the rest.'},
+  {ru:['Песня за минуту','Любые жанры','Свои стихи → в песню','Скачивание треков'],en:['A song in a minute','Any genre','Your lyrics → a song','Download tracks']},
+  {ru:'Для поздравлений и музыки к видео',en:'Greetings and music for videos'},{ru:'Есть бесплатные попытки',en:'Free attempts available'},{ru:'Поёт на русском',en:'Sings in many languages'}),
+ A('eleven','ElevenLabs','ElevenLabs','audio','https://elevenlabs.io','elevenlabs.io','#334155,#2563eb',
+  {ru:'Превращает текст в очень естественную речь на многих языках. Для озвучки видео, аудиокниг и презентаций.',en:'Turns text into very natural speech in many languages. For video voice-overs, audiobooks and presentations.'},
+  {ru:['Реалистичные голоса','Много языков','Озвучка видео и книг','Клонирование голоса (с разрешения)'],en:['Realistic voices','Many languages','Voice-over for videos and books','Voice cloning (with permission)']},
+  {ru:'Для озвучки и аудиокниг',en:'Voice-overs and audiobooks'},{ru:'Есть бесплатный тариф',en:'Free plan available'},{ru:'Говорит на русском',en:'Speaks many languages'}),
+ A('notebooklm','NotebookLM','Google','docs','https://notebooklm.google.com','notebooklm.google.com','#fbbf24,#9a3412',
+  {ru:'Загрузите свои документы, книги или ссылки — ИИ отвечает только по ним, со ссылками на места в тексте. Может сделать «подкаст» из ваших материалов.',en:'Upload your documents, books or links — AI answers only from them, with citations. It can even make a “podcast” from your material.'},
+  {ru:['Вопросы по вашим файлам','Краткие пересказы','Аудио-обзор как подкаст','Несколько источников сразу'],en:['Questions about your files','Short summaries','Audio overview as a podcast','Several sources at once']},
+  {ru:'Для учёбы, исследований и документов',en:'Study, research and documents'},{ru:'Есть бесплатная версия',en:'Free tier available'},{ru:'Работает на русском',en:'Works in many languages'}),
+ A('cursor','Cursor','Anysphere','code','https://cursor.com','cursor.com','#0f172a,#1d4ed8',
+  {ru:'Редактор кода со встроенным ИИ. Опишите, что нужно сделать, — он напишет и исправит программу. Полезен даже новичкам.',en:'A code editor with built-in AI. Describe what you need — it writes and fixes the program. Useful even for beginners.'},
+  {ru:['Пишет код по описанию','Находит и чинит ошибки','Объясняет чужой код','Понимает весь проект'],en:['Writes code from a description','Finds and fixes bugs','Explains unfamiliar code','Understands the whole project']},
+  {ru:'Для создания сайтов и программ',en:'Building sites and apps'},{ru:'Есть бесплатный тариф, платный — расширенный',en:'Free plan; paid plan for more'},{ru:'Можно писать по-русски',en:'You can write in Russian'}),
+ A('canva','Canva','Canva','docs','https://www.canva.com','canva.com','#00c4cc,#7d2ae8',
+  {ru:'Конструктор дизайна с ИИ: создаёт презентации, афиши и посты из короткого описания, убирает фон, дорисовывает картинки.',en:'A design tool with AI: makes presentations, posters and posts from a short description, removes backgrounds, extends images.'},
+  {ru:['Презентации по описанию','Шаблоны для соцсетей','ИИ-редактор фото','Удаление фона'],en:['Presentations from a prompt','Social media templates','AI photo editor','Background remover']},
+  {ru:'Для презентаций, афиш и постов',en:'Presentations, posters and posts'},{ru:'Есть бесплатная версия',en:'Free tier available'},{ru:'Интерфейс на русском',en:'Many interface languages'})
+];
+const byId=id=>AIS.find(a=>a.id===id);
+
+const GOALS=[
+ [{ru:'Писать тексты и письма',en:'Write texts and emails'},['claude','chatgpt','alice']],
+ [{ru:'Ответить на вопрос / объяснить тему',en:'Answer a question / explain a topic'},['chatgpt','gemini','alice']],
+ [{ru:'Найти информацию в интернете',en:'Find information online'},['perplexity','copilot','gemini']],
+ [{ru:'Нарисовать картинку',en:'Draw a picture'},['kandinsky','midjourney','leonardo']],
+ [{ru:'Сделать видео',en:'Make a video'},['runway','kandinsky']],
+ [{ru:'Песня или озвучка',en:'Song or voice-over'},['suno','eleven']],
+ [{ru:'Разобрать документ или книгу',en:'Analyze a document or book'},['notebooklm','claude','gemini']],
+ [{ru:'Презентация или афиша',en:'Presentation or poster'},['canva','copilot','chatgpt']],
+ [{ru:'Написать программу или сайт',en:'Build a program or website'},['cursor','claude','deepseek']],
+ [{ru:'Решить задачу по математике',en:'Solve a math problem'},['deepseek','chatgpt','gemini']],
+ [{ru:'Учиться (язык, школа, курсы)',en:'Study (language, school, courses)'},['chatgpt','notebooklm','gemini']]
+];
+const PREFS={
+ free:[{ru:'💸 Хочу бесплатно',en:'💸 I want it free'},['chatgpt','gemini','copilot','perplexity','deepseek','alice','giga','kandinsky','notebooklm','claude','canva','leonardo','eleven','suno','runway','cursor']],
+ ru:[{ru:'🇷🇺 Нужен русский язык',en:'🇷🇺 Needs Russian language'},['alice','giga','kandinsky','chatgpt','claude','gemini','notebooklm','suno','eleven','perplexity','deepseek','copilot','canva']],
+ office:[{ru:'🏢 Работаю в Microsoft Office',en:'🏢 I use Microsoft Office'},['copilot','chatgpt','canva']],
+ google:[{ru:'📧 Пользуюсь Google',en:'📧 I use Google services'},['gemini','notebooklm']]
+};
+const WHY={
+ chatgpt:{ru:'Универсальный — справится почти с любой задачей.',en:'Universal — handles almost any task.'},
+ claude:{ru:'Пишет аккуратно, по-человечески, хорош с длинными текстами.',en:'Writes carefully and naturally, great with long texts.'},
+ gemini:{ru:'Дружит с сервисами Google, умеет работать с видео и файлами.',en:'Works with Google services, handles video and files.'},
+ copilot:{ru:'Ищет в интернете, встроен в Windows и Office.',en:'Searches the web, built into Windows and Office.'},
+ perplexity:{ru:'Даёт ответы со ссылками — легко проверить.',en:'Gives answers with sources — easy to verify.'},
+ deepseek:{ru:'Силён в логике и математике, показывает решение по шагам.',en:'Strong in logic and math, shows solutions step by step.'},
+ alice:{ru:'Отлично знает русский язык и реалии.',en:'Knows Russian language and context very well.'},
+ giga:{ru:'Российский сервис, удобный для клиентов Сбера.',en:'Russian service, handy for Sber customers.'},
+ midjourney:{ru:'Самые красивые «художественные» картинки.',en:'The most beautiful artistic images.'},
+ kandinsky:{ru:'Понимает запросы по-русски, прост в использовании.',en:'Understands Russian prompts, easy to use.'},
+ leonardo:{ru:'Много готовых стилей для арта и персонажей.',en:'Many ready styles for art and characters.'},
+ runway:{ru:'Лидер среди сервисов для создания видео.',en:'A leader among video-creation tools.'},
+ suno:{ru:'Сочинит песню целиком по описанию.',en:'Composes a whole song from a description.'},
+ eleven:{ru:'Самая естественная озвучка текста.',en:'The most natural text-to-speech.'},
+ notebooklm:{ru:'Отвечает строго по вашим документам.',en:'Answers strictly from your documents.'},
+ cursor:{ru:'Редактор, в котором ИИ пишет программу за вас.',en:'An editor where AI writes the program for you.'},
+ canva:{ru:'Презентации и афиши за пару минут.',en:'Presentations and posters in minutes.'}
+};
+
+/* ================== ОБУЧЕНИЕ ================== */
+const FIRST=[
+ [{ru:'Откройте любой чат-бот',en:'Open any chatbot'},{ru:'Нажмите «Открыть» в каталоге. Часто нужна регистрация — хватает почты или аккаунта Google.',en:'Click “Open” in the catalog. You often need to sign up — an email or Google account is enough.'}],
+ [{ru:'Напишите задачу обычными словами',en:'Write the task in plain words'},{ru:'Как будто объясняете человеку. Специальных команд знать не нужно.',en:'As if explaining to a person. No special commands needed.'}],
+ [{ru:'Прочитайте и уточните',en:'Read and refine'},{ru:'Не понравилось? Напишите: «Сделай короче», «Проще», «Добавь пример». ИИ помнит весь разговор.',en:'Not happy? Write: “Make it shorter”, “Simpler”, “Add an example”. AI remembers the whole chat.'}],
+ [{ru:'Проверьте важное',en:'Verify what matters'},{ru:'Цифры, даты, лекарства, законы — сверяйте с надёжными источниками. ИИ иногда ошибается.',en:'Numbers, dates, medicine, laws — check with reliable sources. AI sometimes makes mistakes.'}]
+];
+const PARTS=[
+ [{ru:'1. Роль',en:'1. Role'},{ru:'Кем ИИ должен быть: «Ты — учитель английского»',en:'Who the AI should be: “You are an English teacher”'}],
+ [{ru:'2. Задача',en:'2. Task'},{ru:'Что сделать: «объясни времена глаголов»',en:'What to do: “explain verb tenses”'}],
+ [{ru:'3. Детали',en:'3. Details'},{ru:'Для кого и зачем: «мне 50 лет, начинаю с нуля»',en:'For whom and why: “I am 50, starting from zero”'}],
+ [{ru:'4. Формат',en:'4. Format'},{ru:'Как ответить: «коротко, списком, с примерами»',en:'How to answer: “short, as a list, with examples”'}]
+];
+const COMPARE={
+ bad:{h:{ru:'❌ Плохая просьба',en:'❌ Bad request'},c:{ru:'Расскажи про английский',en:'Tell me about English'},p:{ru:'Слишком расплывчато — получится длинный общий текст.',en:'Too vague — you will get a long generic text.'}},
+ good:{h:{ru:'✅ Хорошая просьба',en:'✅ Good request'},c:{ru:'Ты — терпеливый учитель английского. Я начинающий, мне 50 лет. Объясни простыми словами, чем отличаются Present Simple и Present Continuous. Дай по 3 примера и короткий тест из 3 вопросов.',en:'You are a patient English teacher. I am a beginner, 50 years old. Explain in simple words the difference between Present Simple and Present Continuous. Give 3 examples each and a short 3-question quiz.'},p:{ru:'Понятно, кто, для кого и в каком виде.',en:'Clear who, for whom, and in what form.'}}
+};
+const PROMPTS=[
+ [{ru:'✉️ Деловое письмо',en:'✉️ Business email'},{ru:'Ты — опытный помощник по деловой переписке. Напиши вежливое письмо [кому] о [что нужно]. Тон — уважительный, без канцелярита. Не более 120 слов.',en:'You are an experienced business-writing assistant. Write a polite email to [whom] about [what]. Respectful tone, no jargon. Max 120 words.'}],
+ [{ru:'🧑‍🏫 Объяснить тему',en:'🧑‍🏫 Explain a topic'},{ru:'Объясни простыми словами, что такое [тема], как будто мне 12 лет. Приведи 2 примера из жизни и в конце задай 3 вопроса, чтобы проверить понимание.',en:'Explain in simple words what [topic] is, as if I were 12. Give 2 everyday examples and finish with 3 questions to check my understanding.'}],
+ [{ru:'🍲 Рецепт из того, что есть',en:'🍲 Recipe from what I have'},{ru:'У меня дома есть: [продукты]. Предложи 3 несложных блюда на ужин: время приготовления и пошаговый рецепт.',en:'I have at home: [ingredients]. Suggest 3 easy dinner dishes with cooking time and step-by-step recipes.'}],
+ [{ru:'📄 Пересказ документа',en:'📄 Summarize a document'},{ru:'Вот текст: [вставьте]. Перескажи главное в 5 пунктах, затем выпиши все даты, суммы и сроки отдельным списком.',en:'Here is the text: [paste]. Summarize the main points in 5 bullets, then list all dates, amounts and deadlines separately.'}],
+ [{ru:'🎨 Описание для картинки',en:'🎨 Image prompt'},{ru:'Нарисуй [что], стиль — [акварель / фото / мультфильм], освещение — [мягкое / закат], настроение — [тёплое, уютное]. Формат — горизонтальный.',en:'Draw [what], style — [watercolor / photo / cartoon], lighting — [soft / sunset], mood — [warm, cozy]. Landscape format.'}],
+ [{ru:'🌍 Учу язык',en:'🌍 Learning a language'},{ru:'Ты — репетитор [язык]. Мой уровень — [начальный]. Поговорим на тему «[тема]»: ты задаёшь вопрос, я отвечаю, ты исправляешь ошибки и кратко объясняешь.',en:'You are a [language] tutor. My level is [beginner]. Let’s talk about “[topic]”: you ask, I answer, you correct my mistakes and explain briefly.'}],
+ [{ru:'💼 Подготовка к собеседованию',en:'💼 Interview prep'},{ru:'Я иду на собеседование на должность [должность]. Задай 10 вероятных вопросов по одному. После каждого ответа оцени его и подскажи, как улучшить.',en:'I have an interview for [position]. Ask me 10 likely questions one by one. After each answer, rate it and suggest improvements.'}],
+ [{ru:'🧭 План на неделю',en:'🧭 Weekly plan'},{ru:'Помоги составить план на неделю. Цель: [цель]. Свободное время: [часы в день]. Разбей на небольшие ежедневные шаги и скажи, что делать, если я что-то пропущу.',en:'Help me make a plan for the week. Goal: [goal]. Free time: [hours per day]. Split it into small daily steps and tell me what to do if I miss something.'}]
+];
+const TIPS=[
+ [{ru:'Просите уточнять',en:'Ask it to ask'},{ru:'Добавьте: «Если не хватает данных — сначала задай мне вопросы».',en:'Add: “If you lack information, ask me questions first.”'}],
+ [{ru:'Давайте пример',en:'Give an example'},{ru:'«Пиши в таком стиле: …» — и вставьте образец.',en:'“Write in this style: …” — and paste a sample.'}],
+ [{ru:'Делите на части',en:'Split into parts'},{ru:'Сложную задачу разбейте: сначала план, потом каждый раздел отдельно.',en:'Split big tasks: first an outline, then each section separately.'}],
+ [{ru:'Просите объяснить',en:'Ask for an explanation'},{ru:'«Объясни, как будто мне 10 лет» — работает с любой темой.',en:'“Explain like I’m 10” — works with any topic.'}],
+ [{ru:'Начинайте заново',en:'Start fresh'},{ru:'Если разговор запутался, откройте новый чат и сформулируйте задачу чище.',en:'If the chat got messy, open a new one and state the task cleanly.'}]
+];
+const SAFE=[
+ [{ru:'🔒 Не вводите пароли и данные карт',en:'🔒 Never enter passwords or card data'},{ru:'Никогда — ни в какой чат.',en:'Never — in any chat.'}],
+ [{ru:'📑 Не загружайте чужие секреты',en:'📑 Don’t upload secrets'},{ru:'Рабочие договоры и личные данные клиентов — только если это разрешено.',en:'Work contracts and clients’ personal data — only if allowed.'}],
+ [{ru:'🩺 Не лечитесь по ИИ',en:'🩺 Don’t self-treat via AI'},{ru:'Здоровье и юридические вопросы — к врачу и юристу. ИИ лишь помогает разобраться.',en:'For health and legal matters see a doctor or lawyer. AI only helps you understand.'}],
+ [{ru:'🎭 Помните про подделки',en:'🎭 Beware of fakes'},{ru:'Голос и видео можно подделать. Если «родственник» просит денег — перезвоните ему сами.',en:'Voices and videos can be faked. If a “relative” asks for money — call them back yourself.'}]
+];
+const FAQ1=[
+ [{ru:'ИИ — это платно?',en:'Is AI paid?'},{ru:'У большинства есть бесплатная версия с ограничениями (по числу запросов в день). Платные подписки дают более умные модели и больше возможностей. Для начала бесплатной почти всегда достаточно.',en:'Most have a free version with limits (requests per day). Paid plans give smarter models and more features. Free is almost always enough to start.'}],
+ [{ru:'ИИ заменит людей?',en:'Will AI replace people?'},{ru:'Он берёт на себя рутину: черновики, поиск, сортировку. Решения, проверку и ответственность по-прежнему берёт человек. Преимущество получает тот, кто умеет работать с ИИ.',en:'It takes over routine: drafts, search, sorting. People still make decisions, check results and take responsibility. Those who can work with AI gain an edge.'}],
+ [{ru:'Почему ИИ иногда выдумывает?',en:'Why does AI sometimes make things up?'},{ru:'Он не «знает» факты, а подбирает наиболее вероятные слова, поэтому может уверенно сказать неправду. Это называется «галлюцинация». Проверяйте важное; ИИ с поиском (Perplexity) даёт ссылки.',en:'It does not “know” facts — it picks the most likely words, so it can state falsehoods confidently. This is called a “hallucination”. Verify important things; search-based AI (Perplexity) gives sources.'}],
+ [{ru:'Нужен ли VPN?',en:'Do I need a VPN?'},{ru:'Некоторые сервисы недоступны в ряде стран и регионов. Если один не открывается — попробуйте другой. Условия на сайте сервиса могут меняться.',en:'Some services are unavailable in certain countries or regions. If one does not open, try another. Terms on the service’s site may change.'}],
+ [{ru:'Мои переписки кто-то видит?',en:'Can anyone see my chats?'},{ru:'Сервисы могут хранить диалоги и использовать их для улучшения. В настройках обычно можно отключить историю. Не пишите туда секретного.',en:'Services may store chats and use them to improve. Settings usually let you turn history off. Don’t write secrets there.'}]
+];
+const FAQ2=[
+ [{ru:'Промпт',en:'Prompt'},{ru:'Ваш запрос к ИИ — то, что вы ему пишете.',en:'Your request to the AI — what you write to it.'}],
+ [{ru:'Нейросеть',en:'Neural network'},{ru:'Программа, устроенная по образцу мозга, которая научилась находить закономерности в огромных данных.',en:'A brain-inspired program that learned to find patterns in huge amounts of data.'}],
+ [{ru:'Модель',en:'Model'},{ru:'«Мозг» конкретного ИИ. У одного сервиса может быть несколько моделей: быстрая и простая либо медленная и умная.',en:'The “brain” of a specific AI. One service may have several: fast and simple, or slower and smarter.'}],
+ [{ru:'Токен',en:'Token'},{ru:'Кусочек слова. Лимиты и цена часто считаются в токенах: 1 токен — это примерно 3–4 буквы.',en:'A piece of a word. Limits and prices are often counted in tokens: about 3–4 letters each.'}],
+ [{ru:'Контекст',en:'Context'},{ru:'Всё, что ИИ «помнит» в текущем разговоре. Слишком длинный диалог начинает забываться — начните новый.',en:'Everything the AI “remembers” in the current chat. A very long chat starts fading — start a new one.'}],
+ [{ru:'Мультимодальный ИИ',en:'Multimodal AI'},{ru:'Понимает не только текст, но и картинки, звук, документы. Можно сфотографировать меню на чужом языке и попросить перевести.',en:'Understands not just text but images, sound and documents. Snap a photo of a foreign menu and ask for a translation.'}]
+];
+
+/* ================== ХЕЛПЕРЫ ================== */
+const $=id=>document.getElementById(id);
+const el=(t,c,h)=>{const e=document.createElement(t);if(c)e.className=c;if(h!=null)e.innerHTML=h;return e};
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const FALL="data:image/svg+xml,"+encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><rect width="64" height="64" rx="14" fill="#2f7bff"/><text x="32" y="43" font-size="34" text-anchor="middle" fill="#fff" font-family="Arial">AI</text></svg>');
+const imgTag=a=>`<img src="${fav(a.dom)}" alt="${esc(a.name)}" loading="lazy" onerror="this.onerror=null;this.src='${FALL}'">`;
+
+/* ================== ВИЗУАЛ: ТУМАННОСТИ, ПЛАНЕТЫ, ИКОНКИ ================== */
+function nebula(c1,c2,seed,solid=true,w=420,h=200,tint='.75 .9 1'){
+  let s=seed*9301+49297,r=()=>(s=(s*9301+49297)%233280)/233280,st='';
+  for(let i=0;i<26;i++)st+=`<circle cx='${(r()*w).toFixed(0)}' cy='${(r()*h).toFixed(0)}' r='${(r()*1.1+.3).toFixed(1)}' fill='white' opacity='${(r()*.7+.3).toFixed(2)}'/>`;
+  const svg=`<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 ${w} ${h}' preserveAspectRatio='xMidYMid slice'><defs><linearGradient id='g' x1='0' y1='0' x2='1' y2='1'><stop offset='0' stop-color='${c1}'/><stop offset='1' stop-color='${c2}'/></linearGradient><filter id='n' x='0' y='0' width='100%' height='100%'><feTurbulence type='fractalNoise' baseFrequency='.008 .015' numOctaves='5' seed='${seed}'/><feColorMatrix values='0 0 0 0 ${tint.split(' ')[0]} 0 0 0 0 ${tint.split(' ')[1]} 0 0 0 0 ${tint.split(' ')[2]} 0 0 0 2.6 -1.05'/></filter></defs>${solid?`<rect width='100%' height='100%' fill='url(#g)'/>`:''}<rect width='100%' height='100%' filter='url(#n)' opacity='${solid?.55:.9}'/>${solid?st:''}</svg>`;
+  return `url("data:image/svg+xml,${encodeURIComponent(svg)}")`;
+}
+document.body.style.setProperty('--neb',nebula('','',11,false,1400,900,'.2 .45 1'));
+
+const ICONS={'💬':'<path d="M21 12a8 8 0 0 1-11.6 7.1L4 20l1-4.4A8 8 0 1 1 21 12z"/><path d="M8.5 11h7M8.5 14h4"/>',
+ '🎨':'<rect x="3" y="4" width="18" height="16" rx="3"/><circle cx="9" cy="10" r="1.8"/><path d="M4 18l5-5 4 4 3-3 4 4"/>',
+ '🎬':'<rect x="3" y="5" width="18" height="14" rx="3"/><path d="M10 9.5v5l4.5-2.5z"/>',
+ '🎵':'<path d="M9 18V6l11-2v12"/><circle cx="6.5" cy="18" r="2.5"/><circle cx="17.5" cy="16" r="2.5"/>',
+ '🔎':'<circle cx="11" cy="11" r="6.5"/><path d="M16 16l5 5"/>',
+ '💻':'<path d="M8 8l-5 4 5 4M16 8l5 4-5 4M14 5l-4 14"/>',
+ '📄':'<path d="M6 3h8l5 5v13H6z"/><path d="M14 3v5h5M9 13h7M9 17h5"/>'};
+const icon=e=>ICONS[e]?`<svg viewBox="0 0 24 24" aria-hidden="true">${ICONS[e]}</svg>`:e;
+
+/* процедурная планета: шум -> палитра -> сфера с освещением, облаками и атмосферой */
+function planet(cv,o){
+  const S=cv.width,R=S/2,ctx=cv.getContext('2d'),W=256,H=128;
+  let sd=o.seed*7919+13;const rnd=()=>(sd=(sd*16807)%2147483647)/2147483647;
+  const sm=t=>t*t*(3-2*t);
+  const noise=(bands)=>{
+    const L=[];for(let k=0;k<5;k++){const n=4<<k,rows=n/2+1,g=new Float32Array(n*rows);for(let i=0;i<g.length;i++)g[i]=rnd();L.push({n,g})}
+    const t=new Float32Array(W*H);
+    for(let y=0;y<H;y++)for(let x=0;x<W;x++){let a=0,amp=.5,tot=0;
+      for(let k=0;k<5;k++){const {n,g}=L[k],fx=x/W*n,fy=y/H*(n/2),x0=Math.floor(fx),y0=Math.floor(fy),tx=sm(fx-x0),ty=sm(fy-y0);
+        const q=(i,j)=>g[(j)*n+(i%n)];
+        const v=(q(x0,y0)*(1-tx)+q(x0+1,y0)*tx)*(1-ty)+(q(x0,y0+1)*(1-tx)+q(x0+1,y0+1)*tx)*ty;
+        a+=v*amp;tot+=amp;amp*=.5}
+      a/=tot;
+      if(bands)a=a*.65+.35*(.5+.5*Math.sin(y/H*Math.PI*bands+a*5));
+      t[y*W+x]=Math.min(1,Math.max(0,(a-.2)*1.6))}
+    return t};
+  const tex=noise(o.bands||0),cl=noise(0);
+  const lut=new Uint8Array(256*3);
+  for(let i=0;i<256;i++){const v=i/255;let k=0;while(k<o.pal.length-2&&v>o.pal[k+1][0])k++;
+    const [p0,c0]=o.pal[k],[p1,c1]=o.pal[k+1],f=Math.min(1,Math.max(0,(v-p0)/(p1-p0)));
+    for(let c=0;c<3;c++)lut[i*3+c]=c0[c]+(c1[c]-c0[c])*f}
+  const N=S*S,lon=new Float32Array(N),row=new Int16Array(N),dif=new Float32Array(N),fre=new Float32Array(N),alp=new Uint8Array(N);
+  const Lx=-.55,Ly=-.45,Lz=.7,Ln=Math.hypot(Lx,Ly,Lz);
+  for(let y=0;y<S;y++)for(let x=0;x<S;x++){const i=y*S+x,nx=(x+.5-R)/R,ny=(y+.5-R)/R,d2=nx*nx+ny*ny;
+    if(d2>1){alp[i]=0;continue}
+    const nz=Math.sqrt(1-d2);lon[i]=Math.atan2(nx,nz);row[i]=Math.min(H-1,Math.floor((.5-Math.asin(-ny)/Math.PI)*H));
+    const dd=(nx*Lx+ny*Ly+nz*Lz)/Ln;dif[i]=sm(Math.min(1,Math.max(0,(dd+.12)/.9)));fre[i]=Math.pow(1-nz,2.6);
+    alp[i]=Math.min(255,Math.max(1,(1-Math.sqrt(d2))*R*180))}
+  const img=ctx.createImageData(S,S),d=img.data,at=o.atm||[90,170,255];let rot=0,last=0,vis=true;
+  const draw=()=>{const cr=rot*1.35;
+    for(let i=0;i<N;i++){const a=alp[i];if(!a){d[i*4+3]=0;continue}
+      let u=((lon[i]+rot)/6.2832%1+1)%1,idx=row[i]*W+(u*W|0);
+      let v=tex[idx],li=(v*255|0)*3,r=lut[li],g=lut[li+1],b=lut[li+2];
+      let u2=((lon[i]+cr)/6.2832%1+1)%1,c=Math.max(0,cl[row[i]*W+(u2*W|0)]-(o.cloudCut||.5))*(o.cloud||1.6);
+      if(c>0){c=Math.min(c,.85);r+=(245-r)*c;g+=(250-g)*c;b+=(255-b)*c}
+      const sh=.05+.95*dif[i],f=fre[i]*(.35+dif[i]*.9);
+      d[i*4]=Math.min(255,r*sh+at[0]*f);d[i*4+1]=Math.min(255,g*sh+at[1]*f);d[i*4+2]=Math.min(255,b*sh+at[2]*f);d[i*4+3]=a}
+    ctx.putImageData(img,0,0)};
+  draw();
+  if(matchMedia('(prefers-reduced-motion:reduce)').matches)return;
+  new IntersectionObserver(e=>vis=e[0].isIntersecting).observe(cv);
+  (function f(ts){requestAnimationFrame(f);if(!vis||ts-last<45)return;last=ts;rot+=o.speed||.012;draw()})(0);
+}
+planet($('hp'),{seed:5,bands:7,speed:.011,cloud:1.2,cloudCut:.56,atm:[80,190,255],
+  pal:[[0,[6,14,60]],[.25,[16,52,160]],[.5,[28,122,235]],[.72,[70,214,255]],[.88,[150,235,255]],[1,[235,250,255]]]});
+planet($('dp1'),{seed:21,bands:11,speed:.006,cloud:.6,cloudCut:.6,atm:[150,110,255],
+  pal:[[0,[24,10,70]],[.3,[70,40,180]],[.55,[140,80,240]],[.78,[225,120,230]],[1,[255,215,245]]]});
+planet($('dp2'),{seed:33,bands:0,speed:.008,cloud:1.8,cloudCut:.5,atm:[110,220,255],
+  pal:[[0,[4,22,70]],[.42,[8,70,160]],[.5,[230,214,160]],[.56,[40,150,90]],[.78,[24,100,70]],[1,[240,250,255]]]});
+/* ================== ЗВЁЗДНОЕ НЕБО ================== */
+(()=>{
+  const c=$('stars'),x=c.getContext('2d');let W,H,S=[],sh=[],sy=0;
+  const rs=()=>{W=c.width=innerWidth;H=c.height=innerHeight;S=Array.from({length:Math.min(260,Math.floor(W*H/6500))},()=>({x:Math.random()*W,y:Math.random()*H,r:Math.random()*1.5+.2,p:Math.random()*6.28,s:Math.random()*.02+.005,d:Math.random()*.6+.1,h:Math.random()<.25?200:Math.random()<.5?220:260}))};
+  addEventListener('resize',rs);rs();addEventListener('scroll',()=>sy=scrollY,{passive:true});
+  const reduce=matchMedia('(prefers-reduced-motion:reduce)').matches;
+  (function f(){
+    x.clearRect(0,0,W,H);
+    for(const s of S){s.p+=s.s;const a=.45+.55*Math.sin(s.p);let y=(s.y-sy*s.d*.25)%H;if(y<0)y+=H;
+      x.fillStyle=`hsla(${s.h},90%,${75+a*20}%,${a})`;x.beginPath();x.arc(s.x,y,s.r,0,6.283);x.fill()}
+    if(!reduce&&Math.random()<.008&&sh.length<2)sh.push({x:Math.random()*W,y:Math.random()*H*.5,l:0,v:9+Math.random()*6});
+    sh=sh.filter(m=>{m.x+=m.v;m.y+=m.v*.55;m.l++;const g=x.createLinearGradient(m.x,m.y,m.x-90,m.y-50);g.addColorStop(0,'rgba(160,220,255,.95)');g.addColorStop(1,'rgba(160,220,255,0)');
+      x.strokeStyle=g;x.lineWidth=2;x.beginPath();x.moveTo(m.x,m.y);x.lineTo(m.x-90,m.y-50);x.stroke();return m.l<60});
+    requestAnimationFrame(f)})();
+})();
+
+/* ================== ОРБИТА В HERO ================== */
+(()=>{
+  const sp=$('space');
+  [['chatgpt',40,-4],['claude',77,20],['gemini',77,62],['midjourney',40,82],['perplexity',3,62],['suno',3,20]].forEach(([id,x,y],i)=>{
+    const a=byId(id),l=el('a','sat');l.href=a.url;l.target='_blank';l.rel='noopener';l.title=a.name;
+    l.style.cssText=`left:${x}%;top:${y}%;animation-delay:${i*.7}s`;l.innerHTML=imgTag(a);sp.appendChild(l)});
+  $('s1').textContent=AIS.length;
+})();
+
+/* ================== РЕНДЕР КОНТЕНТА ================== */
+let goal=null,prefs=new Set(),cat='all';
+
+function renderStatic(){
+  document.documentElement.lang=LANG;
+  document.title={ru:'AI Galaxy — ИИ простыми словами',kk:'AI Galaxy — ЖИ қарапайым тілмен',en:'AI Galaxy — AI in plain words'}[LANG];
+  document.querySelectorAll('[data-i]').forEach(n=>n.textContent=T(UI[n.dataset.i]));
+  $('bru').classList.toggle('on',LANG==='ru');$('ben').classList.toggle('on',LANG==='en');
+
+  $('typesbox').innerHTML=TYPES.map(([ic,h,p,ex])=>`<div class="type glass"><div class="ic">${icon(ic)}</div><h3>${T(h)}</h3><p>${T(p)}</p><div class="ex">${T({ru:'Примеры: ',en:'Examples: '})}${ex}</div></div>`).join('');
+
+  const gb=$('goals');gb.innerHTML='';
+  GOALS.forEach((g,i)=>{const b=el('button','chip'+(goal===i?' on':''),T(g[0]));b.onclick=()=>{goal=i;renderStatic_goals();renderRec()};gb.appendChild(b)});
+  const pb=$('prefs');pb.innerHTML='';
+  Object.entries(PREFS).forEach(([k,p])=>{const b=el('button','chip'+(prefs.has(k)?' on':''),T(p[0]));b.onclick=()=>{prefs.has(k)?prefs.delete(k):prefs.add(k);b.classList.toggle('on');renderRec()};pb.appendChild(b)});
+  renderRec();
+
+  const fb=$('filters');fb.innerHTML='';
+  Object.entries(CATS).forEach(([k,v])=>{const b=el('button','chip'+(cat===k?' on':''),T(v));b.onclick=()=>{cat=k;[...fb.children].forEach(c=>c.classList.toggle('on',c===b));drawCards()};fb.appendChild(b)});
+  drawCards();
+
+  $('first').innerHTML=FIRST.map(([h,p])=>`<div class="step glass"><h3>${T(h)}</h3><p>${T(p)}</p></div>`).join('');
+  $('parts').innerHTML=PARTS.map(([h,p])=>`<div><b>${T(h)}</b>${T(p)}</div>`).join('');
+  $('compare').innerHTML=['bad','good'].map(k=>`<div class="box ${k}"><h4>${T(COMPARE[k].h)}</h4><code>${esc(T(COMPARE[k].c))}</code><p>${T(COMPARE[k].p)}</p></div>`).join('');
+  const pr=$('prompts');pr.innerHTML='';
+  PROMPTS.forEach(([t,p])=>{const d=el('div','prompt glass',`<h4>${T(t)}</h4><p>${esc(T(p))}</p>`);
+    const b=el('button','btn sm ghost',T(UI.copy));
+    b.onclick=async()=>{try{await navigator.clipboard.writeText(T(p));b.textContent=T(UI.copied)}catch{}setTimeout(()=>b.textContent=T(UI.copy),1800)};d.appendChild(b);pr.appendChild(d)});
+  $('tips').innerHTML=TIPS.map(([h,p])=>`<div class="step glass"><h3>${T(h)}</h3><p>${T(p)}</p></div>`).join('');
+  $('safe').innerHTML=SAFE.map(([h,p])=>`<div><b>${T(h)}</b><span>${T(p)}</span></div>`).join('');
+  const fq=l=>l.map(([q,a])=>`<details><summary>${T(q)}</summary><p>${T(a)}</p></details>`).join('');
+  $('faq1').innerHTML=fq(FAQ1);$('faq2').innerHTML=fq(FAQ2);
+}
+function renderStatic_goals(){[...$('goals').children].forEach((c,i)=>c.classList.toggle('on',i===goal))}
+
+function renderRec(){
+  const res=$('result');res.innerHTML='';
+  if(goal==null){res.innerHTML=`<p style="color:var(--muted)">${T(UI.pick_empty)}</p>`;return}
+  let ids=GOALS[goal][1].slice(),note=false;
+  prefs.forEach(k=>{
+    const keep=PREFS[k][1],f=ids.filter(i=>keep.includes(i));
+    if(k==='office'||k==='google'){ids=[...f,...ids.filter(i=>!f.includes(i))];if(!f.length)note=true}
+    else if(f.length)ids=f;
+  });
+  if(note)res.insertAdjacentHTML('beforeend',`<p style="color:var(--muted)">${T(UI.pick_note)}</p>`);
+  ids.slice(0,3).forEach((id,i)=>{const a=byId(id);
+    res.insertAdjacentHTML('beforeend',`<div class="rec${i?'':' first'}"><a href="${a.url}" target="_blank" rel="noopener">${imgTag(a)}</a>
+      <div class="t"><b>${esc(a.name)}</b>${i?'':`<span class="badge">${T(UI.best_choice)}</span>`}<small>${T(WHY[id])}</small><small>${T(a.price)}</small></div>
+      <a class="btn sm" href="${a.url}" target="_blank" rel="noopener">${T(UI.open_arrow)}</a></div>`)});
+}
+
+function drawCards(){
+  const box=$('cards');box.innerHTML='';
+  AIS.filter(a=>cat==='all'||a.cat===cat).forEach((a,i)=>{
+    const [c1,c2]=a.color.split(',');
+    box.insertAdjacentHTML('beforeend',`<article class="card glass">
+      <a class="pic" href="${a.url}" target="_blank" rel="noopener" style="background:${nebula(c1,c2,i+3)} center/cover" aria-label="${esc(a.name)}">${imgTag(a)}<i>${T(UI.click_open)}</i></a>
+      <div class="body"><div class="tag">${T(CATS[a.cat]).replace(/^\S+\s/,'')} · ${esc(a.by)}</div><h3>${esc(a.name)}</h3><p>${T(a.d)}</p>
+      <ul>${T(a.f).map(x=>`<li>${x}</li>`).join('')}</ul>
+      <div class="meta"><div><span>${T(UI.best_for)}</span> ${T(a.best)}</div><div><span>${T(UI.price)}</span> ${T(a.price)}</div><div><span>${T(UI.rulang)}</span> ${T(a.lang)}</div></div>
+      <div class="go"><a class="btn" href="${a.url}" target="_blank" rel="noopener">${T(UI.open)} ${esc(a.name)} ↗</a></div></div></article>`)});
+}
+
+/* ================== РЕАЛЬНЫЕ НОВОСТИ ================== */
+const FEEDS={
+  ru:{url:'https://habr.com/ru/rss/hubs/artificial_intelligence/all/',src:'Хабр'},
+  en:{url:'https://techcrunch.com/category/artificial-intelligence/feed/',src:'TechCrunch'},
+  kk:{url:'https://kaz.nur.kz/rss/all.rss',src:'NUR.KZ'}
+};
+const SAVED={
+  kk:[{title:'ЖИ жаңалықтары — Хабр',link:'https://habr.com/ru/hubs/artificial_intelligence/'},{title:'Жасанды интеллект: жаңа модельдер мен құралдар',link:'https://kaz.nur.kz/'},{title:'Нейрожелілер: қалай бастау керек',link:'https://habr.com/ru/hubs/artificial_intelligence/'}],
+  ru:[{title:'Нейросети: как начать пользоваться и не навредить себе',link:'https://habr.com/ru/hubs/artificial_intelligence/'},{title:'Новые модели ИИ: что умеют сегодня чат-боты',link:'https://habr.com/ru/hubs/artificial_intelligence/'},{title:'Генерация изображений и видео: свежие инструменты',link:'https://habr.com/ru/hubs/artificial_intelligence/'}],
+  en:[{title:'AI news — the latest from TechCrunch',link:'https://techcrunch.com/category/artificial-intelligence/'},{title:'New AI models: what chatbots can do today',link:'https://techcrunch.com/category/artificial-intelligence/'},{title:'AI tools for images and video: what is new',link:'https://techcrunch.com/category/artificial-intelligence/'}]
+};
+const cache={};let news=[],queue=[],shown=new Set(),cnt=0,seen=[];
+const dec=s=>{const t=document.createElement('textarea');t.innerHTML=s;return t.value};
+const safeUrl=u=>/^https?:\/\//i.test(u||'')?u:'#';
+function fmt(d){const t=new Date(String(d||'').replace(' ','T')+'Z');if(isNaN(t))return '';if(LANG==='kk'){const M=['қаң.','ақп.','нау.','сәу.','мам.','мау.','шіл.','там.','қыр.','қаз.','қар.','жел.'],z=n=>String(n).padStart(2,'0');return t.getDate()+' '+M[t.getMonth()]+', '+z(t.getHours())+':'+z(t.getMinutes())}return t.toLocaleString(LANG==='ru'?'ru-RU':'en-US',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'})}
+
+const AIKW=/жасанды интеллект|жасанды зият|нейро|\bЖИ\b|чат-?бот|ChatGPT|OpenAI|Gemini|Claude|DeepSeek|робот|алгоритм|технолог|цифр|смартфон|интернет|Google|Яндекс|Microsoft|Apple|Samsung|Tesla|ғарыш/i;
+async function getFeed(url,src){
+  const r=await fetch('https://api.rss2json.com/v1/api.json?rss_url='+encodeURIComponent(url));
+  const j=await r.json();if(j.status!=='ok'||!j.items||!j.items.length)throw 0;
+  return j.items.map(i=>({title:dec(i.title),link:i.link,date:i.pubDate,img:i.thumbnail||(i.enclosure&&i.enclosure.link)||'',src}));
+}
+async function loadNews(){
+  const lang=LANG,live=$('live');
+  live.className='live';$('livet').textContent=T(UI.live_load);
+  try{
+    let items;
+    if(lang==='kk'){
+      /* казахскоязычные новости (NUR.KZ), отобранные по теме технологий и ИИ, + свежие статьи об ИИ с Хабра */
+      const [a,b]=await Promise.allSettled([getFeed(FEEDS.kk.url,'NUR.KZ'),getFeed(FEEDS.ru.url,'Хабр')]);
+      const kz=a.status==='fulfilled'?a.value.filter(n=>AIKW.test(n.title)):[];
+      const hb=b.status==='fulfilled'?b.value:[];
+      items=[];const m=Math.max(kz.length,hb.length);
+      for(let i=0;i<m;i++){if(kz[i])items.push(kz[i]);if(hb[i])items.push(hb[i])}
+      if(!items.length)throw 0;
+    }else items=await getFeed(FEEDS[lang].url,FEEDS[lang].src);
+    cache[lang]=items.slice(0,24);
+    if(lang!==LANG)return;
+    news=cache[lang];live.className='live';$('livet').textContent=T(UI.live_on)+' '+new Date().toLocaleTimeString(({ru:'ru-RU',kk:'kk-KZ',en:'en-US'}[LANG]),{hour:'2-digit',minute:'2-digit'});
+  }catch{
+    if(lang!==LANG)return;
+    news=cache[lang]||SAVED[lang].map(x=>({...x,date:'',img:'',src:FEEDS[lang].src}));
+    live.className='live off';$('livet').textContent=T(UI.live_off);
+  }
+  drawNews();
+}function drawNews(){
+  const box=$('newsbox');box.innerHTML='';
+  news.slice(0,8).forEach(n=>{
+    const a=el('a','nitem glass');a.href=safeUrl(n.link);a.target='_blank';a.rel='noopener';
+    const th=el('div','th');
+    if(n.img&&/^https?:/.test(n.img)){th.style.backgroundImage=`linear-gradient(180deg,transparent 40%,rgba(5,8,30,.7)),url("${n.img.replace(/"/g,'%22')}")`}else th.style.backgroundImage=nebula('#12378f','#4b2fc9',Math.floor(Math.random()*40)+1);
+    const tx=el('div','tx');const b=el('b');b.textContent=n.title;const s=el('small');s.textContent=[n.src,fmt(n.date)].filter(Boolean).join(' · ')+'  '+T(UI.read);
+    tx.append(b,s);a.append(th,tx);box.appendChild(a)});
+  /* бегущая строка */
+  const h=news.map(n=>`<a href="${safeUrl(n.link)}" target="_blank" rel="noopener">🆕 ${esc(n.title)}</a>`).join('');
+  $('tick').innerHTML=h+h;
+  queue=news.slice();
+}
+
+function notify(){
+  if(!news.length)return;
+  if(!queue.length)queue=news.slice();
+  const n=queue.shift();
+  const t=el('div','toast');
+  t.innerHTML=`<div class="em">🛰️</div><div><b>${T(UI.toast_t)} · ${esc(n.src)}</b><a href="${safeUrl(n.link)}" target="_blank" rel="noopener">${esc(n.title)}</a><br><small>${esc(fmt(n.date))}</small></div><button aria-label="×">×</button>`;
+  const close=()=>{t.classList.add('out');setTimeout(()=>t.remove(),350)};
+  t.querySelector('button').onclick=close;$('toasts').appendChild(t);
+  while($('toasts').children.length>3)$('toasts').firstChild.remove();
+  setTimeout(close,9000);
+  $('cnt').textContent=++cnt;
+  seen.unshift(n);seen=seen.slice(0,20);
+  $('plist').innerHTML=seen.map(x=>`<div class="it"><span>🆕</span><div><a href="${safeUrl(x.link)}" target="_blank" rel="noopener">${esc(x.title)}</a><small>${esc(x.src)} ${esc(fmt(x.date))}</small></div></div>`).join('');
+}
+
+/* ================== СТАРТ ================== */
+function setLang(l){LANG=l;try{localStorage.setItem('lang',l)}catch{};seen=[];$('plist').innerHTML='';renderStatic();news=cache[l]||[];if(news.length)drawNews();loadNews()}
+$('bru').onclick=()=>setLang('ru');$('ben').onclick=()=>setLang('en');
+$('bell').onclick=()=>{$('panel').classList.toggle('open');$('cnt').textContent=0;cnt=0};
+document.addEventListener('click',e=>{if(!$('panel').contains(e.target)&&!e.target.closest('#bell'))$('panel').classList.remove('open')});
+renderStatic();loadNews();
+setTimeout(notify,3500);setInterval(notify,13000);
+setInterval(loadNews,5*60*1000);
+</script>
+</body>
+</html>
